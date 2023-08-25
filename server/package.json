@@ -1,0 +1,16 @@
+{
+  "name": "support-ticketing-system",
+  "version": "1.0.0",
+  "author": "Marc Chester Masakayan",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://github.com/mcmfire/support-ticketing-system#readme",
+  "description": "The initial package for Support Ticketing System containing all the necessities for using the application.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcmfire/support-ticketing-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mcmfire/support-ticketing-system/issues"
+  }
+}

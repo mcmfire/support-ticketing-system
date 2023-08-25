@@ -1,0 +1,38 @@
+{
+  "name": "support-ticketing-system",
+  "version": "1.0.0",
+  "author": "Marc Chester Masakayan",
+  "license": "MIT",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "deploy": "gh-pages -d dist"
+  },
+  "homepage": "https://github.com/mcmfire/support-ticketing-system#readme",
+  "description": "The initial package for Support Ticketing System containing all the necessities for using the application.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcmfire/support-ticketing-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mcmfire/support-ticketing-system/issues"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-react": "^7.22.5",
+    "babel-loader": "^9.1.3",
+    "html-webpack-plugin": "^5.5.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
