@@ -1,4 +1,5 @@
 from flask import Flask
+from routes.auth import auth_bp
 from utils.extensions import pymongo, jwt
 from config.setup import AppSettings
 
@@ -14,4 +15,5 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
+    app.register_blueprint(auth_bp)
     app.run(host='localhost', port=5000)
