@@ -1,4 +1,10 @@
 from flask import request
+from utils.extensions import bcrypt
+
+def hash_input(data):
+    hashed_data = bcrypt.generate_password_hash(data).decode('utf-8')
+
+    return hashed_data
 
 def filter_input(**kwargs):
     data = {}
@@ -8,6 +14,6 @@ def filter_input(**kwargs):
             required = ("email", "username", "password", "first_name", "last_name")
         
         if key in required:
-            data[key] = value
+            data[key] = value if key != "password" else hash_input(value)
 
     return data

@@ -1,6 +1,6 @@
 from flask import Flask
 from routes.auth import auth_bp
-from utils.extensions import pymongo, jwt
+from utils.extensions import pymongo, jwt, bcrypt
 from config.setup import AppSettings
 
 def create_app():
@@ -9,7 +9,8 @@ def create_app():
 
     pymongo.init_app(app)
     jwt.init_app(app)
-
+    bcrypt.init_app(app)
+    
     return app
 
 
