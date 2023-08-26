@@ -1,5 +1,6 @@
 from flask import jsonify
 from utils.extensions import pymongo
+from utils.user_input import check_hash_input
 
 class User:
     def __init__(self, email, username, password, first_name, last_name):
@@ -9,6 +10,34 @@ class User:
         self.first_name = first_name
         self.last_name = last_name
     
+    @staticmethod
+    def get_by_identity(identity):
+        user = pymongo.cx['auth']['credentials'].find_one(
+            {
+                "$or": [
+                    {"username": identity},
+                    {"email": identity}
+                ]
+            }
+        )
+
+        if not user:
+            return False
+        
+        return user
+    
+    @classmethod
+    def authenticate(cls, username, password):
+        user = cls.get_by_identity(username)
+
+        if user:
+            if not check_hash_input(user['password'], password):
+                return jsonify({"message": "Invalid password."}), 401
+            
+            return jsonify({"message": "Login successful."}), 200
+        
+        return jsonify({"message": "Something went wrong."}), 500
+
     def save(self):
         user = pymongo.cx['auth']['credentials'].find_one(
             {
@@ -38,7 +67,11 @@ class User:
 
             return jsonify({"message": "User has been saved."}), 200
         
-        if user["username"] == self.username or user["email"] == self.email:
-            return jsonify({"message": "Username or Email already exists!"}), 409
+        if user['username'] == self.username and user['email'] == self.email:
+            return jsonify({"message": "Username and Email already exists!"}), 409
+        elif user['username'] == self.username:
+            return jsonify({"message": "Username already exists!"}), 409
+        elif user['email'] == self.email:
+            return jsonify({"message": "Email already exists!"}), 409
         
         return jsonify({"message": "Something went wrong."}), 500
