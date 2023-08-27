@@ -84,10 +84,11 @@ class User:
         return jsonify({"message": "Something went wrong."}), 500
     
     @classmethod
-    def revoke(cls):
+    def revoke(cls, refresh_token):
         current_token = {
             "jti": get_jwt()['jti'],
-            "exp": get_jwt()['exp']
+            "exp": get_jwt()['exp'],
+            "refresh_token": refresh_token
         }
 
         token = pymongo.cx['auth']['tokens'].find_one(current_token, {"_id": 0})

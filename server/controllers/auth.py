@@ -28,6 +28,8 @@ class AuthController(AuthService):
         return response
     
     def logout_user(self):
-        response = self.revoke_user()
+        data = request.get_json()
+        user_input = filter_input(**data)
+        response = self.revoke_user(**user_input)
 
         return response

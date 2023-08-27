@@ -25,7 +25,7 @@ class AuthService:
         return response
     
     @staticmethod
-    def revoke_user():
-        response = User.revoke()
+    def revoke_user(refresh_token):
+        response = User.revoke(refresh_token)
 
         return response
