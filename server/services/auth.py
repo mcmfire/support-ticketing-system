@@ -2,8 +2,8 @@ from flask import jsonify
 from models.user import User
 
 class AuthService:
-    @classmethod
-    def get_user(cls, identity):
+    @staticmethod
+    def get_user(identity):
         user = User.get_by_identity(identity)
 
         if not user:
@@ -11,15 +11,21 @@ class AuthService:
 
         return jsonify({"username": user['username']}), 200
 
-    @classmethod
-    def authenticate_user(cls, username, password):
+    @staticmethod
+    def authenticate_user(username, password):
         response = User.authenticate(username, password)
 
         return response
 
-    @classmethod
-    def save_user(cls, email, username, password, first_name, last_name):
+    @staticmethod
+    def save_user(email, username, password, first_name, last_name):
         user = User(email, username, password, first_name, last_name)
         response = user.save()
+
+        return response
+    
+    @staticmethod
+    def revoke_user():
+        response = User.revoke()
 
         return response

@@ -1,6 +1,8 @@
 from flask import jsonify
+from flask_jwt_extended import get_jwt
 from utils.extensions import pymongo
 from utils.user_input import check_hash_input
+from utils.token import generate_token
 
 class User:
     def __init__(self, email, username, password, first_name, last_name):
@@ -34,7 +36,12 @@ class User:
             if not check_hash_input(user['password'], password):
                 return jsonify({"message": "Invalid password."}), 401
             
-            return jsonify({"message": "Login successful."}), 200
+            token = generate_token(username)
+
+            return jsonify({
+                "message": "Login successful.",
+                "token": token
+            }), 200
         
         return jsonify({"message": "Something went wrong."}), 500
 
@@ -75,3 +82,22 @@ class User:
             return jsonify({"message": "Email already exists!"}), 409
         
         return jsonify({"message": "Something went wrong."}), 500
+    
+    @classmethod
+    def revoke(cls):
+        current_token = {
+            "jti": get_jwt()['jti'],
+            "exp": get_jwt()['exp']
+        }
+
+        token = pymongo.cx['auth']['tokens'].find_one(current_token, {"_id": 0})
+
+        if not token:
+            pymongo.cx['auth']['tokens'].insert_one(current_token)
+
+            return jsonify({"message": "Logout successful."}), 200
+        
+        return jsonify({"message": "User already logged out."}), 409
+        
+
+        

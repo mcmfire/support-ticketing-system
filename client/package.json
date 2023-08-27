@@ -9,7 +9,7 @@
     "start": "webpack-dev-server --mode development --open --hot",
     "build": "webpack --mode production",
     "test": "jest",
-    "deploy": "gh-pages -d dist"
+    "deploy": ""
   },
   "homepage": "https://github.com/mcmfire/support-ticketing-system#readme",
   "description": "The initial package for Support Ticketing System containing all the necessities for using the application.",

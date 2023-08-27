@@ -26,3 +26,8 @@ class AuthController(AuthService):
         response = self.save_user(**user_input)
 
         return response
+    
+    def logout_user(self):
+        response = self.revoke_user()
+
+        return response
