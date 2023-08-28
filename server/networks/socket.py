@@ -1,18 +1,25 @@
-from flask_jwt_extended import verify_jwt_in_request, get_jwt
-from utils.token import generate_token
+import os
+from flask_jwt_extended import get_jwt
+from utils.token import generate_token, process_token
 from utils.extensions import socketio
+from datetime import datetime, timezone, timedelta
+
+@socketio.on('connect')
+def client_connect():
+    socketio.send('Client connected successfully.')
 
 @socketio.on('request_token_refresh')
-def regenerate_token():
-    valid = verify_jwt_in_request(optional=True, refresh=True, verify_type=True)
-    
-    if valid:
-        token = generate_token(get_jwt()['sub'])
+def regenerate_token(data):
+    current_token = data.get('current_token')
+    token = process_token(current_token)
+
+    if token and token['type'] == 'refresh':
+        new_token = generate_token(get_jwt()['sub'])
 
         socketio.emit('token_refresh_response', {
             "message": "Token refreshed.",
             "token": {
-                "access_token": token["access_token"],
-                "refresh_token": token["refresh_token"]
+                "access_token": new_token["access_token"],
+                "refresh_token": new_token["refresh_token"]
             }
         })
