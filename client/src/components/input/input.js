@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
 
-const Input = ({className, type, placeholder}) => {
+const Input = ({className, name, type, placeholder}) => {
     return (
-        <input className={`button ${className}`} type={type} placeholder={placeholder}>
+        <input className={`button ${className}`} name={name} type={type} placeholder={placeholder}>
         </input>
     );
 };
 
-Input.PropTypes = {
+Input.propTypes = {
     className: PropTypes.string,
+    name: PropTypes.string,
     type: PropTypes.string,
     placeholder: PropTypes.string
 }
