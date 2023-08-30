@@ -1,33 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import Input from '../../components/input/input';
 import Button from '../../components/button/button';
+import findUser from '../../services/auth/findUser';
 import './style.css';
 
 const Form = () => {
-    const [username, setUsername] = useState('Guest');
+    const [username, setUsername] = useState('');
     const [identity, setIdentity] = useState('');
     const [toggleNext, setToggleNext] = useState(false);
 
     useEffect(() => {
-        if (toggleNext) {
-            fetch('/auth/find-user', {
-                method: 'POST',
-                headers: {'Content-type': 'application/json'},
-                body: JSON.stringify({"identity":identity}),
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-            })
-            .then(data => setUsername(data['username']));
-        }
-    }, [toggleNext]);
+        if (identity) {findUser(identity, setUsername, setToggleNext);}
+    }, [identity]);
 
     const submitIdentity = (event) => {
         event.preventDefault();
-        setIdentity(event.target.elements['identity-entry'].value);
-        setToggleNext(true);
+        let userInput = event.target.elements['identity-entry'].value
+
+        if (userInput) {setIdentity(userInput);}
+        
     };
 
     const submitPassword = (event) => {
