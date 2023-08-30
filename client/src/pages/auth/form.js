@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import findUser from '../../services/auth/findUser';
+import authenticateUser from '../../services/auth/authenticateUser';
 import './style.css';
 
 const Form = () => {
@@ -15,15 +16,19 @@ const Form = () => {
 
     const submitIdentity = (event) => {
         event.preventDefault();
-        let userInput = event.target.elements['identity-entry'].value
-
-        if (userInput) {setIdentity(userInput);}
+        const identityInput = event.target.elements['identity-entry'].value;
+    
+        if (identityInput) {setIdentity(identityInput);}
         
     };
 
     const submitPassword = (event) => {
         event.preventDefault();
-        console.log('User authenticated.');
+        const username = localStorage.getItem('username');
+        const passwordInput = event.target.elements['password-entry'].value;
+
+        if (passwordInput) {authenticateUser(username, passwordInput);};
+        
     };
 
     const goBack = (event) => {
@@ -43,7 +48,7 @@ const Form = () => {
             )}
             {toggleNext && (
                 <form className='password-form' onSubmit={submitPassword}>
-                    <Input className='password-entry' type='password' placeholder='Password'/>
+                    <Input className='password-entry' name='password-entry' type='password' placeholder='Password'/>
                     <Button className='login-button' type='submit' text='Login'/>
                     <Button className='back-button' type='button' text='Back' onClick={goBack}/>
                 </form>

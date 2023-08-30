@@ -29,14 +29,14 @@ class User:
         return user
     
     @classmethod
-    def authenticate(cls, username, password):
-        user = cls.get_by_identity(username)
+    def authenticate(cls, identity, password):
+        user = cls.get_by_identity(identity)
 
         if user:
             if not check_hash_input(user['password'], password):
                 return jsonify({"message": "Invalid password."}), 401
             
-            token = generate_token(username)
+            token = generate_token(identity)
 
             return jsonify({
                 "message": "Login successful.",

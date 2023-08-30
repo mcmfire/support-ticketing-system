@@ -10,7 +10,7 @@ class AuthController(AuthService):
         data = request.get_json()
         user_input = filter_input(**data)
         response = self.get_user(**user_input)
-
+        
         return response
     
     def login_user(self):

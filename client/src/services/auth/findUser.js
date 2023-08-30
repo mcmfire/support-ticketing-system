@@ -5,18 +5,19 @@ const findUser = (identity, setUsername = null, setToggleNext = null) => {
         fetch('/auth/find-user', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({"identity":identity}),
+            body: JSON.stringify({"identity": identity}),
         })
-        .then(response => {
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (setUsername && setToggleNext) {
                 setUsername(data['username']);
             
-                if (data['username']) {setToggleNext(true);}
+                if (data['username']) {
+                    localStorage.setItem('username', data['username']);
+                    setToggleNext(true);
+                }
             }
-            
+
             resolve(data);
         });
     });
