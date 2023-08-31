@@ -9,7 +9,7 @@ class AuthController(AuthService):
     def find_user(self):
         data = request.get_json()
         user_input = filter_input(**data)
-        response = self.get_user(**user_input)
+        response = self.get_by_identity(**user_input)
         
         return response
     
