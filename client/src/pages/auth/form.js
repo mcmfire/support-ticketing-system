@@ -19,7 +19,6 @@ const Form = () => {
         const identityInput = event.target.elements['identity-entry'].value;
     
         if (identityInput) {setIdentity(identityInput);}
-        
     };
 
     const submitPassword = (event) => {
@@ -28,11 +27,12 @@ const Form = () => {
         const passwordInput = event.target.elements['password-entry'].value;
 
         if (passwordInput) {authenticateUser(username, passwordInput);};
-        
     };
 
     const goBack = (event) => {
         event.preventDefault();
+        setIdentity('');
+        setUsername('');
         setToggleNext(false);
     };
 

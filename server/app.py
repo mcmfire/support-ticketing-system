@@ -1,7 +1,7 @@
 from flask import Flask
 from routes.auth import auth_bp
 from routes.main import main_bp
-from utils.extensions import socketio, pymongo, jwt, bcrypt
+from utils.extensions import socketio, pymongo, cache, jwt, bcrypt
 from config.setup import AppSettings
 
 def create_app():
@@ -10,6 +10,7 @@ def create_app():
 
     socketio.init_app(app)
     pymongo.init_app(app)
+    cache.init_app(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
     

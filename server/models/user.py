@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt
-from utils.extensions import pymongo
+from utils.extensions import pymongo, cache
 from utils.user_input import check_hash_input
 from utils.token import generate_token
 
@@ -14,6 +14,11 @@ class User:
     
     @staticmethod
     def get_by_identity(identity):
+        cache_key = f'identity_cache={identity}'
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+        
         user = pymongo.cx['auth']['credentials'].find_one(
             {
                 "$or": [
@@ -26,6 +31,8 @@ class User:
         if not user:
             return False
         
+        cache.set(cache_key, user)
+
         return user
     
     @classmethod
@@ -46,15 +53,7 @@ class User:
         return jsonify({"message": "Something went wrong."}), 500
 
     def save(self):
-        user = pymongo.cx['auth']['credentials'].find_one(
-            {
-                "$or": [
-                    {"username": self.username},
-                    {"email": self.email}
-                ]
-            },
-            {"_id": 0}
-        )
+        user = self.get_by_identity(self.username) or self.get_by_identity(self.email)
         
         if not user:
             credentials = {
