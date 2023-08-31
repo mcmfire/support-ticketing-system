@@ -2,7 +2,6 @@ import os
 from flask_jwt_extended import get_jwt
 from utils.token import generate_token, process_token
 from utils.extensions import socketio
-from datetime import datetime, timezone, timedelta
 
 @socketio.on('connect')
 def client_connect():

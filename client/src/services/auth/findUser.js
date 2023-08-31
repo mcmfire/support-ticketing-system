@@ -13,7 +13,7 @@ const findUser = (identity, setUsername = null, setToggleNext = null) => {
                 setUsername(data['username']);
             
                 if (data['username']) {
-                    localStorage.setItem('username', data['username']);
+                    sessionStorage.setItem('username', data['username']);
                     setToggleNext(true);
                 }
             }
@@ -21,6 +21,6 @@ const findUser = (identity, setUsername = null, setToggleNext = null) => {
             resolve(data);
         });
     });
-}
+};
 
 export default findUser;

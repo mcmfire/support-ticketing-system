@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Navigate} from 'react-router-dom';
 import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import findUser from '../../services/auth/findUser';
@@ -9,6 +10,7 @@ const Form = () => {
     const [username, setUsername] = useState('');
     const [identity, setIdentity] = useState('');
     const [toggleNext, setToggleNext] = useState(false);
+    const [toPanel, setToPanel] = useState(false);
 
     useEffect(() => {
         if (identity) {findUser(identity, setUsername, setToggleNext);}
@@ -23,10 +25,12 @@ const Form = () => {
 
     const submitPassword = (event) => {
         event.preventDefault();
-        const username = localStorage.getItem('username');
+        const username = sessionStorage.getItem('username');
         const passwordInput = event.target.elements['password-entry'].value;
 
-        if (passwordInput) {authenticateUser(username, passwordInput);};
+        if (passwordInput) {
+            authenticateUser(username, passwordInput, setToPanel);
+        };
     };
 
     const goBack = (event) => {
@@ -53,6 +57,7 @@ const Form = () => {
                     <Button className='back-button' type='button' text='Back' onClick={goBack}/>
                 </form>
             )}
+            {toPanel && <Navigate to='/panel'/>}
         </div>
     );
 };

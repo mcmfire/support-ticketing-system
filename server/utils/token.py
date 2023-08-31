@@ -1,5 +1,5 @@
 from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_jwt_extended import decode_token, get_jwt
+from flask_jwt_extended import decode_token
 from flask_jwt_extended.exceptions import JWTDecodeError
 from datetime import datetime
 
