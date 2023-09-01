@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
+import authReset from '../../utils/authReset';
 
 const openPanel = (setMessage) => {
     const access_token = sessionStorage.getItem('access_token');
-    
+
     if (!access_token) {
-        alert("Please login to continue.");
-        window.location.href = '/auth';
-        return;
+        authReset();
+        return Promise.resolve(true);
     }
 
     return new Promise((resolve, reject) => {
@@ -20,6 +20,10 @@ const openPanel = (setMessage) => {
         .then(response => response.json())
         .then(data => {
             setMessage(data['message']);
+            resolve(false);
+        })
+        .catch(() => {
+            authReset();
             resolve(true);
         });
     });

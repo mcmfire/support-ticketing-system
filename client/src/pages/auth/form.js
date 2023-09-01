@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {Navigate} from 'react-router-dom';
 import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import findUser from '../../services/auth/findUser';
 import authenticateUser from '../../services/auth/authenticateUser';
+import UserRedirect from '../../utils/userRedirect';
 import './style.css';
 
 const Form = () => {
@@ -42,6 +42,7 @@ const Form = () => {
 
     return (
         <div className='form-container'>
+            {toPanel && UserRedirect('/panel')}
             {!toggleNext && (<h1>Let's be a wingman today!</h1>)}
             {toggleNext && (<h1>Welcome back, {username}!</h1>)}
             {!toggleNext && (
@@ -57,7 +58,6 @@ const Form = () => {
                     <Button className='back-button' type='button' text='Back' onClick={goBack}/>
                 </form>
             )}
-            {toPanel && <Navigate to='/panel'/>}
         </div>
     );
 };

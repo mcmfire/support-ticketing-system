@@ -24,10 +24,7 @@ const authenticateUser = (identity, password, setToPanel) => {
                 setToken(access_token, refresh_token);
                 setToPanel(true);
                 resolve();
-            }
-
-            console.log(data);
-            
+            }   
             resolve();
         });
     });

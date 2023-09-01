@@ -1,3 +1,4 @@
-input {
+input.identity-entry,
+input.password-entry {
     border-color: #1e1e1e;
 }

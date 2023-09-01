@@ -17,7 +17,6 @@ const findUser = (identity, setUsername = null, setToggleNext = null) => {
                     setToggleNext(true);
                 }
             }
-
             resolve(data);
         });
     });

@@ -1,0 +1,14 @@
+div.auth-dialog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: #1e1e1e 1.5px solid;
+}
+
+div.auth-dialog button {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #1e1e1e;
+    cursor: pointer;
+}
