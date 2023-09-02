@@ -2,6 +2,7 @@ from flask import jsonify, session
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 from models.user import User
 from utils.extensions import pymongo, cache
+from utils.cleanup import user_data_cleanup
 from utils.token import generate_token
 from utils.db import get_user_auth
 from utils.user_input import check_hash_input
@@ -114,8 +115,7 @@ class AuthService:
 
         if not token:
             cache_key = f'user_cache={get_jwt()["sub"]}'
-            cache.delete(cache_key)
-            session.clear()
+            user_data_cleanup(cache_key)
             pymongo.cx['auth']['tokens'].insert_one(current_token)
 
             return jsonify({"message": "Logout successful."}), 200
