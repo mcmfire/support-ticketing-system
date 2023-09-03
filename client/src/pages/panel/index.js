@@ -11,16 +11,20 @@ const Panel = () => {
     
     useEffect(() => {
         openSocket('connect', () => {
-            console.log('[CLIENT]: ', 'Connected to server.');
+            console.log('[CLIENT]: ', 'Connected to the server.');
         });
         openSocket('message', (message) => {
             console.log('[SERVER]: ', message);
         });
+        openSocket('connect_error', () => {
+            console.log('[CLIENT]: ', 'Cannot establish connection to the server.')
+        })
         
         return () => {
             disconnectSocket();
             closeSocket('connect');
             closeSocket('message');
+            closeSocket('connect_error');
         };
 
     }, []);
@@ -28,7 +32,13 @@ const Panel = () => {
     useEffect(() => {
         openPanel(setMessage)
         .then(navigate => {
-            setToAuth(navigate);
+            if (navigate) {
+                closeSocket('connect');
+                closeSocket('message');
+                closeSocket('connect_error');
+                setToAuth(true);
+            }
+            else {setToAuth(false);}
         });
 
     }, []);

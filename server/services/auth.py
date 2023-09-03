@@ -1,6 +1,7 @@
 from flask import jsonify, session
-from flask_jwt_extended import get_jwt, verify_jwt_in_request
+from flask_jwt_extended import verify_jwt_in_request, jwt_required, get_jwt
 from models.user import User
+from utils.variables import Response
 from utils.extensions import pymongo, cache
 from utils.cleanup import user_data_cleanup
 from utils.token import generate_token
@@ -39,8 +40,10 @@ class AuthService:
         return response
 
     @staticmethod
+    @jwt_required(optional=True, verify_type=False)
     def authenticate_user(password):
         current_user = session.get('user')
+        token = get_jwt()
 
         if current_user:
             user = get_user_auth('credentials', {"username":current_user['username']}, {})
@@ -48,20 +51,21 @@ class AuthService:
             if user:
                 if not check_hash_input(user['password'], password):
                     return jsonify({"message": "Invalid password."}), 401
-                
-                valid = verify_jwt_in_request(optional=True, verify_type=False)
 
-                if not valid:
-                    token = generate_token(user['username'])
+                if not token:
+                    new_token = generate_token(user['username'])
 
                     return jsonify({
                         "message": "Login successful.",
-                        "token": token
+                        "token": new_token
                     }), 200
                 
-                return jsonify({"message": "Action approved."})
+                valid = verify_jwt_in_request(optional=True, verify_type=False)
+
+                if valid:
+                    return jsonify({"message": "Action approved."})
         
-        return jsonify({"message": "Something went wrong."}), 500
+        return Response().undefined
 
     @staticmethod
     def save_user(email, username, password, first_name, last_name):
@@ -101,23 +105,29 @@ class AuthService:
         elif user['email'] == email:
             return jsonify({"message": "Email already exists!"}), 409
         
-        return jsonify({"message": "Something went wrong."}), 500
+        return Response().undefined
     
     @staticmethod
+    @jwt_required(optional=True, verify_type=False)
     def revoke_user(refresh_token):
+        token = get_jwt()
+
+        if not token:
+            return jsonify({"message": "User already logged out."}), 409
+        
         current_token = {
             "jti": get_jwt()['jti'],
             "exp": get_jwt()['exp'],
             "refresh_token": refresh_token
         }
 
-        token = get_user_auth('tokens', current_token, {"_id": 0})
+        revoked_token = get_user_auth('tokens', current_token, {"_id": 0})
 
-        if not token:
+        if not revoked_token:
             cache_key = f'user_cache={get_jwt()["sub"]}'
             user_data_cleanup(cache_key)
             pymongo.cx['auth']['tokens'].insert_one(current_token)
 
             return jsonify({"message": "Logout successful."}), 200
         
-        return jsonify({"message": "User already logged out."}), 409
+        return Response().undefined

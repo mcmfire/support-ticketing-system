@@ -3,8 +3,9 @@ import authReset from '../../utils/authReset';
 
 const openPanel = (setMessage) => {
     const access_token = sessionStorage.getItem('access_token');
+    const refresh_token = sessionStorage.getItem('refresh_token');
 
-    if (!access_token) {
+    if (!refresh_token) {
         authReset();
         return Promise.resolve(true);
     }
@@ -14,16 +15,21 @@ const openPanel = (setMessage) => {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${access_token}`,
+                'Authorization': access_token ? `Bearer ${access_token}` : `Bearer ${refresh_token}`,
             },
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status == 401) {
+                reject(new Error());
+            }
+
+            return response.json();
+        })
         .then(data => {
             setMessage(data['message']);
             resolve(false);
         })
         .catch(() => {
-            authReset();
             resolve(true);
         });
     });
