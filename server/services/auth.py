@@ -4,8 +4,8 @@ from models.user import User
 from utils.variables import Response
 from utils.extensions import pymongo, cache
 from utils.cleanup import user_data_cleanup
-from utils.token import generate_token
-from utils.db import get_user_auth
+from utils.token import generate_token, revoke_token
+from utils.db import get_user_data
 from utils.user_input import check_hash_input
 
 class AuthService:
@@ -17,7 +17,8 @@ class AuthService:
         if user_cache:
             return user_cache
         
-        user = get_user_auth(
+        user = get_user_data(
+                'auth',
                 'profiles',
                 {
                     "$or": [
@@ -46,7 +47,7 @@ class AuthService:
         token = get_jwt()
 
         if current_user:
-            user = get_user_auth('credentials', {"username":current_user['username']}, {})
+            user = get_user_data('auth', 'credentials', {"username":current_user['username']}, {})
 
             if user:
                 if not check_hash_input(user['password'], password):
@@ -69,7 +70,8 @@ class AuthService:
 
     @staticmethod
     def save_user(email, username, password, first_name, last_name):
-        user = get_user_auth(
+        user = get_user_data(
+            'auth',
             'profiles',
             {
                 "$or": [
@@ -110,24 +112,24 @@ class AuthService:
     @staticmethod
     @jwt_required(optional=True, verify_type=False)
     def revoke_user(refresh_token):
-        token = get_jwt()
+        access_token = get_jwt()
 
-        if not token:
+        if not access_token:
             return jsonify({"message": "User already logged out."}), 409
         
-        current_token = {
-            "jti": get_jwt()['jti'],
-            "exp": get_jwt()['exp'],
-            "refresh_token": refresh_token
-        }
-
-        revoked_token = get_user_auth('tokens', current_token, {"_id": 0})
-
-        if not revoked_token:
-            cache_key = f'user_cache={get_jwt()["sub"]}'
-            user_data_cleanup(cache_key)
-            pymongo.cx['auth']['tokens'].insert_one(current_token)
-
-            return jsonify({"message": "Logout successful."}), 200
+        revoked_access = revoke_token(access_token)
+        revoked_refresh = revoke_token(refresh_token)
         
-        return Response().undefined
+        if not (revoked_access or revoked_refresh):
+            return Response().undefined
+        elif revoked_access:
+            revoked = revoked_access
+        elif revoked_refresh:
+            revoked = revoked_refresh
+
+        cache_key = f'user_cache={revoked["sub"]}'
+        user_data_cleanup(cache_key)
+
+        return jsonify({"message": "Logout successful."}), 200
+        
+        

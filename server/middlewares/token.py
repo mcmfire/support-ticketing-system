@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_jwt_extended import verify_jwt_in_request, jwt_required, get_jwt
-from utils.token import generate_token
+from utils.token import generate_token, revoke_token
 
 excluded_endpoints = ('auth_bp.find_user', 'auth_bp.register_user', 'serve_routes', None)
 
@@ -23,11 +23,13 @@ def verify_token():
             if not valid:
                 return jsonify({"message": "Login required."}), 401
             
+            revoke_token(token)
             new_token = generate_token(token['sub'])
             
             return jsonify({
                     "message": "Token refreshed.",
                     "token": new_token
-                })
+                }), 200
+        
     elif request.endpoint == None:
         return jsonify({"message": "Page not found."}), 404
