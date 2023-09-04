@@ -4,6 +4,7 @@ import Dialog from '../../components/dialog/dialog';
 import {openSocket, closeSocket, disconnectSocket} from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
+import authReset from '../../utils/authReset';
 
 const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
@@ -33,12 +34,9 @@ const Panel = () => {
         openPanel(setMessage)
         .then(navigate => {
             if (navigate) {
-                closeSocket('connect');
-                closeSocket('message');
-                closeSocket('connect_error');
-                setToAuth(true);
+                authReset();
             }
-            else {setToAuth(false);}
+            setToAuth(navigate);
         });
 
     }, []);

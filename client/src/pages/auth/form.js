@@ -29,7 +29,10 @@ const Form = () => {
         const passwordInput = event.target.elements['password-entry'].value;
 
         if (passwordInput) {
-            authenticateUser(username, passwordInput, setToPanel);
+            authenticateUser(username, passwordInput)
+            .then(navigate => {
+                setToPanel(navigate);
+            });
         };
     };
 

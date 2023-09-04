@@ -3,8 +3,7 @@ import authReset from '../../utils/authReset';
 import {setToken, getToken } from '../../utils/setToken';
 
 const openPanel = (setMessage) => {
-    const access_token = sessionStorage.getItem('access_token');
-    const refresh_token = sessionStorage.getItem('refresh_token');
+    const {access_token, refresh_token} = getToken();
 
     if (!refresh_token) {
         authReset();
