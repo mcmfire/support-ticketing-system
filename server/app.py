@@ -2,8 +2,10 @@ from flask import Flask
 from middlewares.token import verify_token
 from routes.auth import auth_bp
 from routes.panel import panel_bp
+from networks.socket import init_socket
 from utils.extensions import socketio, pymongo, cache, jwt, bcrypt
 from utils.serve import serve_client
+from utils.threads import init_threads
 from config.setup import AppSettings
 
 def create_app():
@@ -19,8 +21,10 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(panel_bp)
     app.before_request(verify_token)
-
+    
     serve_client(app)
+    init_socket()
+    init_threads()
 
     return app
 

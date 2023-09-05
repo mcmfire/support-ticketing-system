@@ -12,7 +12,7 @@ const authenticateUser = (identity, password) => {
         token = refresh_token;
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         fetch('/auth/login-user', {
             method: 'POST',
             headers: {
@@ -24,15 +24,24 @@ const authenticateUser = (identity, password) => {
                 "password": password
             }),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status == 401) {
+                throw new Error();
+            }
+
+            return response.json();
+        })
         .then(data => {
             if (data['token']) {
                 const new_access_token = data['token']['access_token'];
                 const new_refresh_token = data['token']['refresh_token'];
                 setToken(new_access_token, new_refresh_token);
-                return resolve(true);
-            }   
-            return resolve(false);
+            }
+            console.log(data);
+            resolve(true);
+        })
+        .catch(() => {
+            resolve(false);
         });
     });
 };

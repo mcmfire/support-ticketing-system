@@ -8,14 +8,17 @@ import authReset from '../../utils/authReset';
 
 const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
-    const [message, setMessage] = useState('');
-    
+    const [tasks, setTasks] = useState([]);
+
     useEffect(() => {
         openSocket('connect', () => {
             console.log('[CLIENT]: ', 'Connected to the server.');
         });
         openSocket('message', (message) => {
             console.log('[SERVER]: ', message);
+        });
+        openSocket('disconnect', () => {
+            console.log('[CLIENT]: ', 'Disconnected to the server.');
         });
         openSocket('connect_error', () => {
             console.log('[CLIENT]: ', 'Cannot establish connection to the server.')
@@ -25,13 +28,14 @@ const Panel = () => {
             disconnectSocket();
             closeSocket('connect');
             closeSocket('message');
+            closeSocket('disconnect');
             closeSocket('connect_error');
         };
 
     }, []);
 
     useEffect(() => {
-        openPanel(setMessage)
+        openPanel(setTasks)
         .then(navigate => {
             if (navigate) {
                 authReset();
@@ -47,7 +51,9 @@ const Panel = () => {
             <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
         )}
             <h1>Panel Page.</h1>
-            <p>{message}</p>
+            {tasks.map((task, index) => (
+                <p key={`task-${index + 1}`}><strong>Task {`${index + 1}`}:</strong> {task['title']}</p>
+            ))}
             <TaskStream/>
         </>
     );

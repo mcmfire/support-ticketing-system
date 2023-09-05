@@ -1,9 +1,14 @@
 from flask import jsonify
-from networks.socket import init_socket
+from utils.db import get_user_data
+from utils.threads import task_stream
 
 class PanelService:
     @staticmethod
     def load_panel():
-        init_socket()
-        
-        return jsonify({"message": "Panel page opened."}), 200
+        tasks = get_user_data('data', 'tasks', {}, {'_id':0}, 'all')
+        task_list = [task for task in tasks]
+
+        if not task_stream.is_alive():
+            task_stream.start()
+
+        return jsonify({"tasks": task_list}), 200

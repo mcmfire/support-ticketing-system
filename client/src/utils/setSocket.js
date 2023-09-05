@@ -17,4 +17,8 @@ const disconnectSocket = () => {
     socket.disconnect();
 };
 
-export {openSocket, closeSocket, disconnectSocket};
+const emitSocket = (event, message) => {
+    socket.emit(event, message);
+};
+
+export {openSocket, closeSocket, disconnectSocket, emitSocket};

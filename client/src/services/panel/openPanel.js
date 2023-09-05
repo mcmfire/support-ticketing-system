@@ -2,7 +2,7 @@ import React from 'react';
 import authReset from '../../utils/authReset';
 import {setToken, getToken } from '../../utils/setToken';
 
-const openPanel = (setMessage) => {
+const openPanel = (setTasks) => {
     const {access_token, refresh_token} = getToken();
 
     if (!refresh_token) {
@@ -10,7 +10,7 @@ const openPanel = (setMessage) => {
         return Promise.resolve(true);
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         fetch('/panel/open-panel', {
             method: 'GET',
             headers: {
@@ -20,7 +20,7 @@ const openPanel = (setMessage) => {
         })
         .then(response => {
             if (response.status == 401) {
-                reject(new Error());
+                throw new Error();
             }
 
             return response.json();
@@ -31,7 +31,7 @@ const openPanel = (setMessage) => {
                 const new_refresh_token = data['token']['refresh_token'];
                 setToken(new_access_token, new_refresh_token);
             }
-            setMessage(data['message']);
+            setTasks(data['tasks']);
             resolve(false);
         })
         .catch(() => {
