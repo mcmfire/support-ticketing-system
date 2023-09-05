@@ -3,6 +3,7 @@ import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import findUser from '../../services/auth/findUser';
 import authenticateUser from '../../services/auth/authenticateUser';
+import registerUser from '../../services/auth/registerUser';
 import UserRedirect from '../../utils/userRedirect';
 import './style.css';
 
@@ -10,56 +11,104 @@ const Form = () => {
     const [username, setUsername] = useState('');
     const [identity, setIdentity] = useState('');
     const [toggleNext, setToggleNext] = useState(false);
+    const [toggleRegister, setToggleRegister] = useState(false);
     const [toPanel, setToPanel] = useState(false);
 
     useEffect(() => {
-        if (identity) {findUser(identity, setUsername, setToggleNext);}
+        if (identity) {
+            findUser(identity, setUsername, setToggleNext)
+            .then((user) => {
+                user ? console.log(`${user['username']} was found.`) : console.log(`User not found.`);
+            });
+        }
     }, [identity]);
 
     const submitIdentity = (event) => {
         event.preventDefault();
         const identityInput = event.target.elements['identity-entry'].value;
     
-        if (identityInput) {setIdentity(identityInput);}
+        setIdentity(identityInput);
     };
 
     const submitPassword = (event) => {
         event.preventDefault();
-        const username = sessionStorage.getItem('username');
         const passwordInput = event.target.elements['password-entry'].value;
 
-        if (passwordInput) {
-            authenticateUser(username, passwordInput)
-            .then(navigate => {
-                setToPanel(navigate);
-            });
-        };
+        authenticateUser(passwordInput)
+        .then(navigate => {
+            setToPanel(navigate);
+        });
+    };
+
+    const submitRegistration = (event) => {
+        event.preventDefault();
+        const usernameInput = event.target.elements['username-register-entry'].value;
+        const passwordInput = event.target.elements['password-register-entry'].value;
+        const fnameInput = event.target.elements['fname-register-entry'].value;
+        const lnameInput = event.target.elements['lname-register-entry'].value;
+        const emailInput = event.target.elements['email-register-entry'].value;
+        
+        registerUser({
+            "username": usernameInput,
+            "password": passwordInput,
+            "first_name": fnameInput,
+            "last_name": lnameInput,
+            "email": emailInput,
+        })
+        .then((navigate) => {
+            navigate ? console.log('User registered.') : console.log('User not registered');
+        });
     };
 
     const goBack = (event) => {
         event.preventDefault();
         setIdentity('');
         setUsername('');
-        setToggleNext(false);
+        toggleNext ? setToggleNext(false): setToggleRegister(false);
     };
 
     return (
         <div className='form-container'>
             {toPanel && UserRedirect('/panel')}
-            {!toggleNext && (<h1>Let's be a wingman today!</h1>)}
-            {toggleNext && (<h1>Welcome back, {username}!</h1>)}
-            {!toggleNext && (
+            {!toggleNext && !toggleRegister && (
+                <>
+                <h1>Let's be a wingman today!</h1>
                 <form className='identity-form' onSubmit={submitIdentity}>
-                    <Input className='identity-entry' name='identity-entry' type='text' placeholder='Username or Email'/>
+                    <Input className='identity-entry' name='identity-entry' type='text' placeholder='Username or Email' required/>
                     <Button className='confirm-button' type='submit' text='Confirm'/>
+                    <Button className='signup-button' type='button' text='Signup' onClick={() => setToggleRegister(true)}/>
                 </form>
+                </>
             )}
-            {toggleNext && (
+            {toggleNext && !toggleRegister && (
+                <>
+                <h1>Welcome back, {username}!</h1>
                 <form className='password-form' onSubmit={submitPassword}>
-                    <Input className='password-entry' name='password-entry' type='password' placeholder='Password'/>
+                    <Input className='password-entry' name='password-entry' type='password' placeholder='Password' required/>
                     <Button className='login-button' type='submit' text='Login'/>
                     <Button className='back-button' type='button' text='Back' onClick={goBack}/>
                 </form>
+                </>
+                
+            )}
+            {toggleRegister && (
+                <>
+                <h1>Create an account</h1>
+                <form className='registration-form' onSubmit={submitRegistration}>
+                    <Input className='username-entry' name='username-register-entry' 
+                            type='text' placeholder='Username' required/>
+                    <Input className='password-entry' name='password-register-entry' 
+                            type='password' placeholder='Password' required/>
+                    <Input className='fname-entry' name='fname-register-entry' 
+                            type='text' placeholder='First Name' required/>
+                    <Input className='lname-entry' name='lname-register-entry' 
+                            type='text' placeholder='Last Name' required/>
+                    <Input className='email-entry' name='email-register-entry' 
+                            type='email' placeholder='Email'/>
+                    <Button className='register-button' type='submit' text='Register'/>
+                    <Button className='back-button' type='button' text='Back' onClick={goBack}/>
+                </form>
+                </>
             )}
         </div>
     );

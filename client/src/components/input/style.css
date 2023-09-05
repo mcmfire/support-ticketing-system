@@ -1,4 +1,9 @@
 input.identity-entry,
-input.password-entry {
+input.username-entry,
+input.password-entry,
+input.cpassword-entry,
+input.fname-entry,
+input.lname-entry,
+input.email-entry {
     border-color: #1e1e1e;
 }

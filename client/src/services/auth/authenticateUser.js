@@ -1,8 +1,10 @@
 import React from 'react';
 import {setToken, getToken} from "../../utils/setToken";
 
-const authenticateUser = (identity, password) => {
+const authenticateUser = (password) => {
     const {access_token, refresh_token} = getToken();
+    const identity = sessionStorage.getItem('identity');
+
     let token = null;
 
     if (access_token) {

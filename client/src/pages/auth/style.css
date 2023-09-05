@@ -1,14 +1,7 @@
-.form-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.identity-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.password-form {
+.form-container,
+.identity-form,
+.password-form,
+.registration-form {
     display: flex;
     flex-direction: column;
 }
