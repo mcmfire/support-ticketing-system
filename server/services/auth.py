@@ -70,30 +70,34 @@ class AuthService:
 
     @staticmethod
     def save_user(email, username, password, first_name, last_name):
+        keys = [{"username": username}]
+        
+        if email:
+            keys.append({"email": email})
+
         user = get_user_data(
             'auth',
             'profiles',
             {
-                "$or": [
-                    {"username": username},
-                    {"email": email}
-                ]
+                "$or": keys
             }
         )
         new_user = User(email, username, password, first_name, last_name)
 
         if not user:
             credentials = {
-                "email": new_user.email,
                 "username": new_user.username,
                 "password": new_user.password,
             }
             profiles = {
-                "email": new_user.email,
                 "username": new_user.username,
                 "first_name": new_user.first_name,
                 "last_name": new_user.last_name
             }
+            
+            if email:
+                credentials['email'] = new_user.email
+                profiles['email'] = new_user.email
 
             pymongo.cx['auth']['credentials'].insert_one(credentials)
             pymongo.cx['auth']['profiles'].insert_one(profiles)

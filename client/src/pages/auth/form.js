@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import findUser from '../../services/auth/findUser';
@@ -9,35 +9,22 @@ import './style.css';
 
 const Form = () => {
     const [username, setUsername] = useState('');
-    const [identity, setIdentity] = useState('');
     const [toggleNext, setToggleNext] = useState(false);
     const [toggleRegister, setToggleRegister] = useState(false);
     const [toPanel, setToPanel] = useState(false);
 
-    useEffect(() => {
-        if (identity) {
-            findUser(identity, setUsername, setToggleNext)
-            .then((user) => {
-                user ? console.log(`${user['username']} was found.`) : console.log(`User not found.`);
-            });
-        }
-    }, [identity]);
-
     const submitIdentity = (event) => {
         event.preventDefault();
         const identityInput = event.target.elements['identity-entry'].value;
-    
-        setIdentity(identityInput);
+
+        findUser(identityInput, setUsername, setToggleNext);
     };
 
     const submitPassword = (event) => {
         event.preventDefault();
         const passwordInput = event.target.elements['password-entry'].value;
 
-        authenticateUser(passwordInput)
-        .then(navigate => {
-            setToPanel(navigate);
-        });
+        authenticateUser(passwordInput).then(navigate => setToPanel(navigate));
     };
 
     const submitRegistration = (event) => {
@@ -55,14 +42,11 @@ const Form = () => {
             "last_name": lnameInput,
             "email": emailInput,
         })
-        .then((navigate) => {
-            navigate ? console.log('User registered.') : console.log('User not registered');
-        });
+        .then(navigate => navigate ? console.log('User registered.') : console.log('User not registered'));
     };
 
     const goBack = (event) => {
         event.preventDefault();
-        setIdentity('');
         setUsername('');
         toggleNext ? setToggleNext(false): setToggleRegister(false);
     };
