@@ -5,7 +5,8 @@ route_require = {
     "auth_bp.find_user": ('identity', ),
     "auth_bp.login_user": ('password', ),
     "auth_bp.register_user": ('email', 'username', 'password', 'first_name', 'last_name'),
-    "auth_bp.logout_user": ('refresh_token', )
+    "auth_bp.logout_user": ('refresh_token', ),
+    "panel_bp.create_task": ('reporter', 'contact', 'title', 'description')
 }
 
 def hash_input(data):
