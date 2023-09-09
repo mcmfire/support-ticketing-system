@@ -1,4 +1,5 @@
-form button {
+form button,
+div button {
     background-color: #1e1e1e;
     color: #ffffff;
     border-color: #1e1e1e;

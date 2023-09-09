@@ -1,0 +1,8 @@
+.ticket-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-container {
+    border: #1e1e1e 2px solid;
+}
