@@ -1,8 +1,9 @@
 from datetime import datetime
 
 class Task:
-    def __init__(self, reporter, contact, title, description):
+    def __init__(self, reporter, department, contact, title, description):
         self.reporter = reporter
+        self.department = department
         self.position = ""
         self.contact = contact
         self.title = title
@@ -10,4 +11,4 @@ class Task:
         self.date_created = datetime.utcnow().strftime("%B %d, %Y | %I:%M%p")
         self.upvotes = 0
         self.is_responded = False
-        self.department = ""
+        

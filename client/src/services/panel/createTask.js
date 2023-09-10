@@ -4,12 +4,17 @@ import {getToken} from "../../utils/setToken";
 const createTask = (entries) => {
     const {access_token, refresh_token} = getToken();
 
+    if (!refresh_token) {
+        authReset();
+        return Promise.resolve(true);
+    }
+    
     return new Promise((resolve) => {
         fetch('/panel/create-task', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${access_token}` | `Bearer ${refresh_token}`
+                'Authorization': access_token ? `Bearer ${access_token}` : `Bearer ${refresh_token}`,
             },
             body: JSON.stringify(entries),
         })
@@ -21,7 +26,6 @@ const createTask = (entries) => {
             return response.json();
         })
         .then(data => {
-            console.log(data);
             resolve(true);
         })
         .catch(() => {

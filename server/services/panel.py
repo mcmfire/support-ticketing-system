@@ -21,7 +21,8 @@ class PanelService:
         user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
                              {"_id" :0, "email": 0, "username": 0})
         reporter = user['first_name'] + " " + user['last_name']
-        task = Task(reporter, contact, title, description)
+        department = user['department']
+        task = Task(reporter, department, contact, title, description)
         
         document = {}
 

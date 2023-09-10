@@ -4,7 +4,7 @@ import authReset from "../../utils/authReset";
 
 const logoutUser = () => {
     const {access_token, refresh_token} = getToken();
-    console.log(refresh_token);
+
     if (!refresh_token) {
         authReset();
         return new Promise.resolve(true);
@@ -15,7 +15,7 @@ const logoutUser = () => {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${access_token}` | `Bearer ${refresh_token}`
+                'Authorization': access_token ? `Bearer ${access_token}` : `Bearer ${refresh_token}`,
             },
             body: JSON.stringify({"refresh_token": refresh_token}),
         })

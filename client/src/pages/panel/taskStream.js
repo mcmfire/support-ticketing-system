@@ -5,7 +5,18 @@ import createTask from '../../services/panel/createTask';
 import './style.css';
 
 const TaskStream = ({tasks, toggleTicket}) => {
+    let tasksByDepartment = {};
+
+    tasks.forEach((task) => {
+        if (!tasksByDepartment[task['department']]) {
+            tasksByDepartment[task['department']] = [];
+        }
+        tasksByDepartment[task['department']].push(task);
+    })
+
     const createTicket = (event) => {
+        event.preventDefault();
+
         const contactInput = event.target.elements['contact-entry'].value;
         const titleInput = event.target.elements['title-entry'].value;
         const descriptionInput = event.target.elements['description-entry'].value;
@@ -19,16 +30,22 @@ const TaskStream = ({tasks, toggleTicket}) => {
 
     return (
         <>
-        {tasks.map((task, index) => (
-            <div key={`task-${index + 1}`} className='ticket-container'>
+        {Object.keys(tasksByDepartment).map((department) => (
+            <>
+            <h1>{department}</h1>
+            <hr/>
+            {tasksByDepartment[department].map((task, index) => (
+                <div key={`task-${index + 1}`} className='ticket-container'>
                 <h2>{task['reporter']}</h2>
                 <h3>{task['position']}</h3>
                 <hr/>
                 <p>{task['title']}</p>
                 <p>Contact: {task['contact']}</p>
-
             </div>
+            ))}
+            </>
         ))}
+
         {toggleTicket && (
             <form className='ticket-form' onSubmit={createTicket}>
                 <Input className='contanct-entry' name='contact-entry' type='text' placeholder='Contact' required/>
