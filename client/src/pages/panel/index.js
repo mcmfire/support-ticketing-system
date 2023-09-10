@@ -5,6 +5,7 @@ import Button from '../../components/button/button';
 import {openSocket, closeSocket, disconnectSocket} from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
+import logoutUser from '../../services/auth/logoutUser';
 import authReset from '../../utils/authReset';
 
 const Panel = () => {
@@ -47,6 +48,14 @@ const Panel = () => {
 
     }, []);
 
+    const endSession = () => {
+        logoutUser()
+        .then(() => {
+            authReset();
+            UserRedirect('/auth');
+        });
+    };
+
     return (
         <>
         {toAuth && (
@@ -54,6 +63,7 @@ const Panel = () => {
         )}
             <h1>Panel Page.</h1>
             <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
+            <Button className='logout-button' type='button' text='Logout' onClick={endSession}></Button>
             <TaskStream tasks={tasks} toggleTicket={toggleTicket}/>
         </>
     );
