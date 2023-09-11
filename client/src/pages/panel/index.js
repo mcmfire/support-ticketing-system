@@ -17,8 +17,8 @@ const Panel = () => {
         openSocket('connect', () => {
             console.log('[CLIENT]: ', 'Connected to the server.');
         });
-        openSocket('message', (message) => {
-            console.log('[SERVER]: ', message);
+        openSocket('task', (newTask) => {
+            setTasks((previousTasks) => [...previousTasks, newTask]);
         });
         openSocket('disconnect', () => {
             console.log('[CLIENT]: ', 'Disconnected to the server.');

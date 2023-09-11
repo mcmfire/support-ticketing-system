@@ -5,7 +5,6 @@ from routes.panel import panel_bp
 from networks.socket import init_socket
 from utils.extensions import socketio, pymongo, cache, jwt, bcrypt
 from utils.serve import serve_client
-from utils.threads import init_threads
 from config.setup import AppSettings
 
 def create_app():
@@ -24,7 +23,6 @@ def create_app():
     
     serve_client(app)
     init_socket()
-    init_threads()
 
     return app
 

@@ -1,3 +1,4 @@
+from flask_socketio import emit
 from utils.extensions import socketio
 
 def init_socket():
@@ -9,9 +10,9 @@ def init_socket():
     def client_disconnect():
         print('[SERVER]: ', 'Client disconnected.')
 
-    @socketio.on('message')
-    def client_message(message):
-        print('[CLIENT]: ', message)
+    @socketio.on('task')
+    def client_message(task):
+        emit('task', task, broadcast=True)
 
     @socketio.on('connect_error')
     def client_disconnect():
