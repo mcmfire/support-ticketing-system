@@ -4,7 +4,7 @@ import Button from '../../components/button/button';
 import createTask from '../../services/panel/createTask';
 import './style.css';
 
-const TaskStream = ({tasks, toggleTicket}) => {
+const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
     let tasksByDepartment = {};
 
     tasks.forEach((task) => {
@@ -25,6 +25,9 @@ const TaskStream = ({tasks, toggleTicket}) => {
             "contact": contactInput,
             "title": titleInput,
             "description": descriptionInput,
+        })
+        .then(navigate => {
+            setToAuth(navigate);
         });
     };
 
@@ -52,6 +55,7 @@ const TaskStream = ({tasks, toggleTicket}) => {
                 <Input className='title-entry' name='title-entry' type='text' placeholder='Title' required/>
                 <Input className='description-entry' name='description-entry' type='text' placeholder='Description'/>
                 <Button className='submit-ticket-button' type='submit' text='Create'/>
+                <Button className='back-button' type='button' text='Back' onClick={() => setToggleTicket(false)}/>
             </form>
         )}
         </>

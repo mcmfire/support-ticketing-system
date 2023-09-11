@@ -14,20 +14,24 @@ class PanelService:
     @staticmethod
     def add_task(contact, title, description):
         current_user = session.get('user')
-        user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
-                             {"_id" :0, "email": 0, "username": 0})
-        reporter = user['first_name'] + " " + user['last_name']
-        department = user['department']
-        task = Task(reporter, department, contact, title, description)
         
-        document = {}
+        if current_user:
+            user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
+                                {"_id" :0, "email": 0, "username": 0})
+            reporter = user['first_name'] + " " + user['last_name']
+            department = user['department']
+            task = Task(reporter, department, contact, title, description)
+            
+            document = {}
 
-        for key, value in vars(task).items():
-            if value != '':
-                document.update({key:value})
+            for key, value in vars(task).items():
+                if value != '':
+                    document.update({key:value})
 
-        pymongo.cx['data']['tasks'].insert_one(document)
-        document['_id'] = str(document['_id'])
-        socketio.emit('task', document)
+            pymongo.cx['data']['tasks'].insert_one(document)
+            document['_id'] = str(document['_id'])
+            socketio.emit('task', document)
 
-        return jsonify({"message": "Task created."}), 200
+            return jsonify({"message": "Task created."}), 200
+        
+        return jsonify({"message": "Something went wrong."}), 500

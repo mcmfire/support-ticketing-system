@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import TaskStream from './taskStream';
+import UserStream from './userStream';
 import Dialog from '../../components/dialog/dialog';
 import Button from '../../components/button/button';
-import {openSocket, closeSocket, disconnectSocket} from '../../utils/setSocket';
+import {openSocket, closeSocket, disconnectSocket, emitSocket} from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
 import logoutUser from '../../services/auth/logoutUser';
@@ -12,15 +13,23 @@ const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
     const [toggleTicket, setToggleTicket] = useState(false);
     const [tasks, setTasks] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         openSocket('connect', () => {
+            emitSocket('join_room', 'admin_room');
+            emitSocket('room_members', 'admin_room');
             console.log('[CLIENT]: ', 'Connected to the server.');
+        });
+        openSocket('room_members', (members) => {
+            Array.isArray(members) ? setUsers(members) : emitSocket('room_members', 'admin_room');
         });
         openSocket('task', (newTask) => {
             setTasks((previousTasks) => [...previousTasks, newTask]);
         });
         openSocket('disconnect', () => {
+            emitSocket('leave_room', 'admin_room');
+            emitSocket('room_members', 'admin_room');
             console.log('[CLIENT]: ', 'Disconnected to the server.');
         });
         openSocket('connect_error', () => {
@@ -30,7 +39,8 @@ const Panel = () => {
         return () => {
             disconnectSocket();
             closeSocket('connect');
-            closeSocket('message');
+            closeSocket('room_members');
+            closeSocket('task');
             closeSocket('disconnect');
             closeSocket('connect_error');
         };
@@ -64,7 +74,8 @@ const Panel = () => {
             <h1>Panel Page.</h1>
             <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}></Button>
-            <TaskStream tasks={tasks} toggleTicket={toggleTicket}/>
+            <TaskStream tasks={tasks} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} setToAuth={setToAuth}/>
+            <UserStream users={users}/>
         </>
     );
 };

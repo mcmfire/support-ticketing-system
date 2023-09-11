@@ -11,6 +11,7 @@ class AppSettings:
     MONGO_URI = os.environ.get('MONGO_URI')
     MONGO_CONNECT = os.environ.get('MONGO_CONNECT') if os.environ.get('MONGO_CONNECT') else False
     MONGO_MAX_POOL_SIZE = os.environ.get('MONGO_MAX_POOL_SIZE') if os.environ.get('MONGO_MAX_POOL_SIZE') else 10
+    SESSION_TYPE = os.environ.get('SESSION_TYPE') if os.environ.get('SESSION_TYPE') else 'filesystem'
     CACHE_TYPE = os.environ.get('CACHE_TYPE') if os.environ.get('CACHE_TYPE') else 'SimpleCache'
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     JWT_TOKEN_LOCATION = os.environ.get('JWT_TOKEN_LOCATION') if os.environ.get('JWT_TOKEN_LOCATION') else 'headers'
