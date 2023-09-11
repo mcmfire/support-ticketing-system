@@ -1,7 +1,8 @@
 from flask import jsonify, session
 from models.task import Task
 from utils.extensions import pymongo, socketio
-from utils.db import get_user_data
+from utils.db import get_user_data, update_user_data
+from utils.variables import Response
 
 class PanelService:
     @staticmethod
@@ -18,9 +19,11 @@ class PanelService:
         if current_user:
             user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
                                 {"_id" :0, "email": 0, "username": 0})
+            username = user['username']
             reporter = user['first_name'] + " " + user['last_name']
+            position = user['position']
             department = user['department']
-            task = Task(reporter, department, contact, title, description)
+            task = Task(username, reporter, position, department, contact, title, description)
             
             document = {}
 
@@ -34,4 +37,20 @@ class PanelService:
 
             return jsonify({"message": "Task created."}), 200
         
-        return jsonify({"message": "Something went wrong."}), 500
+        return Response().undefined
+    
+    @staticmethod
+    def modify_task(**args):
+        current_user = session.get('user')
+
+        if current_user:
+            data = {}
+            
+            for arg in args:
+                data[arg] = args[arg]
+            
+            update_user_data('data', 'tasks', {"username": current_user['username']}, data)
+
+            return jsonify({"message": "Task updated."}), 200
+
+        return Response().undefined

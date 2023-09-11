@@ -5,3 +5,4 @@ panel_bp = Blueprint('panel_bp', __name__, url_prefix='/panel')
 
 panel_bp.route('/open-panel', methods=['GET'])(PanelController().open_panel)
 panel_bp.route('/create-task', methods=['POST'])(PanelController().create_task)
+panel_bp.route('/update-task', methods=['PATCH'])(PanelController().update_task)

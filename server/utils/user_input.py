@@ -6,7 +6,8 @@ route_require = {
     "auth_bp.login_user": ('password', ),
     "auth_bp.register_user": ('email', 'username', 'password', 'first_name', 'last_name'),
     "auth_bp.logout_user": ('refresh_token', ),
-    "panel_bp.create_task": ('contact', 'title', 'description')
+    "panel_bp.create_task": ('contact', 'title', 'description'),
+    "panel_bp.update_task": ('department', 'position', 'contact', 'title', 'description', 'upvotes', 'is_responded'),
 }
 
 def hash_input(data):
@@ -24,8 +25,8 @@ def filter_input(**kwargs):
     data = {}
 
     for key in route_require[action]:
-        if not kwargs[key]:
-            data[key] = ''
+        if key not in kwargs or not kwargs[key]:
+            continue
         elif key == 'password' and action != 'auth_bp.login_user':
             data[key] = hash_input(kwargs[key])
         else:

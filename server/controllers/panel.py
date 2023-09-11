@@ -17,3 +17,10 @@ class PanelController(PanelService):
         response = self.add_task(**user_input)
 
         return response
+    
+    def update_task(self):
+        data = request.get_json()
+        user_input = filter_input(**data)
+        response = self.modify_task(**user_input)
+
+        return response

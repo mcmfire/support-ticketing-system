@@ -1,10 +1,11 @@
 from datetime import datetime
 
 class Task:
-    def __init__(self, reporter, department, contact, title, description):
+    def __init__(self, username, reporter, position, department, contact, title, description):
+        self.username = username
         self.reporter = reporter
         self.department = department
-        self.position = ""
+        self.position = position
         self.contact = contact
         self.title = title
         self.description = description
