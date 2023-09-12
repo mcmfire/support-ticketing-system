@@ -1,18 +1,25 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Input from '../../components/input/input'
 import Button from '../../components/button/button';
 import createTask from '../../services/panel/createTask';
 import './style.css';
 
 const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
-    let tasksByDepartment = {};
+    const [tasksByDepartment, setTasksByDepartment] = useState({});
+    
+    useEffect(() => {
+        let updatedTasksByDepartment = {};
 
-    tasks.forEach((task) => {
-        if (!tasksByDepartment[task['department']]) {
-            tasksByDepartment[task['department']] = [];
-        }
-        tasksByDepartment[task['department']].push(task);
-    })
+        tasks.forEach((task) => {
+            if (!updatedTasksByDepartment[task['department']]) {
+                updatedTasksByDepartment[task['department']] = [];
+            }
+            updatedTasksByDepartment[task['department']].push(task);
+
+            setTasksByDepartment(updatedTasksByDepartment);
+        })
+
+    }, [tasks]);
 
     const createTicket = (event) => {
         event.preventDefault();

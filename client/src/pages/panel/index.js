@@ -73,7 +73,7 @@ const Panel = () => {
         )}
             <h1>Panel Page.</h1>
             <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
-            <Button className='logout-button' type='button' text='Logout' onClick={endSession}></Button>
+            <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
             <TaskStream tasks={tasks} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} setToAuth={setToAuth}/>
             <UserStream users={users}/>
         </>

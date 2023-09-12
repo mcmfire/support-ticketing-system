@@ -3,12 +3,17 @@ from models.task import Task
 from utils.extensions import pymongo, socketio
 from utils.db import get_user_data, update_user_data
 from utils.variables import Response
+from bson import ObjectId
 
 class PanelService:
     @staticmethod
     def load_panel():
-        tasks = get_user_data('data', 'tasks', {}, {"_id": 0}, 'all')
-        task_list = [task for task in tasks]
+        task_list = []
+        tasks = get_user_data('data', 'tasks', {}, {}, 'all')
+        
+        for task in tasks:
+            task['_id'] = str(task['_id'])
+            task_list.append(task)
 
         return jsonify({"tasks": task_list}), 200
     
@@ -45,11 +50,17 @@ class PanelService:
 
         if current_user:
             data = {}
+            query_filter = {"_id": ObjectId(args['_id'])}
             
             for arg in args:
-                data[arg] = args[arg]
-            
-            updated_document = update_user_data('data', 'tasks', {"username": current_user['username']}, data)
+                if arg != '_id':
+                    data[arg] = args[arg]
+ 
+            if "is_responded" not in args:
+                query_filter.update({"username": current_user['username']})
+
+            updated_document = update_user_data('data', 'tasks', query_filter, data)
+
             socketio.emit('task', updated_document)
 
             return jsonify({"message": "Task updated."}), 200
