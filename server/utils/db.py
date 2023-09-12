@@ -19,3 +19,10 @@ def update_user_data(db, collection, filter, data, amount='one'):
         data = collection_query.update_one(filter, {"$set": data})
     elif amount == 'all':
         data = collection_query.update_many(filter, {"$set": data})
+    
+    document = collection_query.find_one(filter)
+
+    if not document:
+        return None
+    
+    return document

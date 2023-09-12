@@ -18,7 +18,7 @@ class PanelService:
         
         if current_user:
             user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
-                                {"_id" :0, "email": 0, "username": 0})
+                                {"_id" :0, "email": 0})
             username = user['username']
             reporter = user['first_name'] + " " + user['last_name']
             position = user['position']
@@ -49,7 +49,8 @@ class PanelService:
             for arg in args:
                 data[arg] = args[arg]
             
-            update_user_data('data', 'tasks', {"username": current_user['username']}, data)
+            updated_document = update_user_data('data', 'tasks', {"username": current_user['username']}, data)
+            socketio.emit('task', updated_document)
 
             return jsonify({"message": "Task updated."}), 200
 

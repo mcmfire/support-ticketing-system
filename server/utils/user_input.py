@@ -25,8 +25,10 @@ def filter_input(**kwargs):
     data = {}
 
     for key in route_require[action]:
-        if key not in kwargs or not kwargs[key]:
+        if key not in kwargs:
             continue
+        elif not kwargs[key]:
+            data[key] = ''
         elif key == 'password' and action != 'auth_bp.login_user':
             data[key] = hash_input(kwargs[key])
         else:
