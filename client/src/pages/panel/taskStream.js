@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Input from '../../components/input/input'
 import Button from '../../components/button/button';
 import createTask from '../../services/panel/createTask';
+import updateTask from '../../services/panel/updateTask';
 import './style.css';
 
 const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
@@ -11,14 +12,27 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
         let updatedTasksByDepartment = {};
 
         tasks.forEach((task) => {
+            let taskExists = false;
+
             if (!updatedTasksByDepartment[task['department']]) {
                 updatedTasksByDepartment[task['department']] = [];
             }
-            updatedTasksByDepartment[task['department']].push(task);
 
-            setTasksByDepartment(updatedTasksByDepartment);
-        })
+            for (const department in updatedTasksByDepartment) {
+                const departmentTasks = updatedTasksByDepartment[department];
 
+                for (let index = 0; index < departmentTasks.length; index++) {
+                    if (departmentTasks[index]['_id'] === task['_id']) {
+                        departmentTasks[index] = task;
+                        taskExists = true;
+                        break;
+                    }
+                }
+            }
+            if (!taskExists) {updatedTasksByDepartment[task['department']].push(task);}  
+        });
+
+        setTasksByDepartment(updatedTasksByDepartment);
     }, [tasks]);
 
     const createTicket = (event) => {
@@ -38,6 +52,18 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
         });
     };
 
+    const respondTask = (event, taskId, isResponded) => {
+        event.preventDefault();
+
+        updateTask({
+            "_id": taskId,
+            "is_responded": !isResponded
+        })
+        .then(navigate => {
+            setToAuth(navigate);
+        });
+    };
+
     return (
         <>
         {Object.keys(tasksByDepartment).map((department) => (
@@ -51,6 +77,9 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
                 <hr/>
                 <p>{task['title']}</p>
                 <p>Contact: {task['contact']}</p>
+                <Button className='respond-button' type='button' text='Respond' 
+                        onClick={(event) => respondTask(event, task['_id'], task['is_responded'])}
+                        style={{background: task['is_responded'] ? '#00cf2e': '#1e1e1e'}}/>
             </div>
             ))}
             </>

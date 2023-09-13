@@ -60,7 +60,7 @@ class PanelService:
                 query_filter.update({"username": current_user['username']})
 
             updated_document = update_user_data('data', 'tasks', query_filter, data)
-
+            updated_document['_id'] = str(updated_document['_id'])
             socketio.emit('task', updated_document)
 
             return jsonify({"message": "Task updated."}), 200
