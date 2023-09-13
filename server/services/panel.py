@@ -13,6 +13,7 @@ class PanelService:
         
         for task in tasks:
             task['_id'] = str(task['_id'])
+            task['upvotes'] = len(task['upvotes'])
             task_list.append(task)
 
         return jsonify({"tasks": task_list}), 200
@@ -28,7 +29,7 @@ class PanelService:
             reporter = user['first_name'] + " " + user['last_name']
             position = user['position']
             department = user['department']
-            task = Task(username, reporter, position, department, contact, title, description)
+            task = Task(username, reporter, position, department, title, description, contact)
             
             document = {}
 
@@ -38,6 +39,7 @@ class PanelService:
 
             pymongo.cx['data']['tasks'].insert_one(document)
             document['_id'] = str(document['_id'])
+            document['upvotes'] = len(document['upvotes'])
             socketio.emit('task', document)
 
             return jsonify({"message": "Task created."}), 200
@@ -48,21 +50,34 @@ class PanelService:
     def modify_task(**args):
         current_user = session.get('user')
 
-        if current_user:
-            data = {}
-            query_filter = {"_id": ObjectId(args['_id'])}
-            
+        if not current_user:
+            return Response().undefined
+        
+        data = {}
+        query_filter = {"_id": ObjectId(args['_id'])}
+        
+        if "respondent" not in args and "upvote" not in args:
+            query_filter.update({"username": current_user['username']})
+
+        task = get_user_data('data', 'tasks', query_filter,
+                                {"_id": 0, "username": 0, "reporter": 0, "department": 0, 
+                                    "position": 0, "contact": 0, "title": 0, "date_created": 0})
+        
+        if "upvote" in args:
+            if args['upvote'] not in task['upvotes']:
+                data['$push'] = {"upvotes": args['upvote']}
+            else:
+                data['$pull'] = {"upvotes": args['upvote']}
+        elif "respondent" in args and task['respondent'] == args['respondent']:
+            data['$set'] = {'respondent': None}
+        else:
             for arg in args:
                 if arg != '_id':
-                    data[arg] = args[arg]
- 
-            if "is_responded" not in args:
-                query_filter.update({"username": current_user['username']})
+                    data['$set'] = {arg: args[arg]}
 
-            updated_document = update_user_data('data', 'tasks', query_filter, data)
-            updated_document['_id'] = str(updated_document['_id'])
-            socketio.emit('task', updated_document)
+        updated_document = update_user_data('data', 'tasks', query_filter, data)
+        updated_document['_id'] = str(updated_document['_id'])
+        updated_document['upvotes'] = len(updated_document['upvotes'])
+        socketio.emit('task', updated_document)
 
-            return jsonify({"message": "Task updated."}), 200
-
-        return Response().undefined
+        return jsonify({"message": "Task updated."}), 200

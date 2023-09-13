@@ -16,9 +16,9 @@ def update_user_data(db, collection, filter, data, amount='one'):
     collection_query = pymongo.cx[db][collection]
 
     if amount == 'one':
-        data = collection_query.update_one(filter, {"$set": data})
+        data = collection_query.update_one(filter, data)
     elif amount == 'all':
-        data = collection_query.update_many(filter, {"$set": data})
+        data = collection_query.update_many(filter, data)
     
     document = collection_query.find_one(filter)
 

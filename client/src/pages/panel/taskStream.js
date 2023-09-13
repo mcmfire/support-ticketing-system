@@ -7,7 +7,8 @@ import './style.css';
 
 const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
     const [tasksByDepartment, setTasksByDepartment] = useState({});
-    
+    const currentUser = sessionStorage.getItem('username');
+
     useEffect(() => {
         let updatedTasksByDepartment = {};
 
@@ -31,6 +32,10 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
             }
             if (!taskExists) {updatedTasksByDepartment[task['department']].push(task);}  
         });
+        
+        for (const department in updatedTasksByDepartment) {
+            updatedTasksByDepartment[department].sort((taskA, taskB) => taskB['upvotes'] - taskA['upvotes']);
+        }
 
         setTasksByDepartment(updatedTasksByDepartment);
     }, [tasks]);
@@ -52,16 +57,25 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
         });
     };
 
-    const respondTask = (event, taskId, isResponded) => {
+    const respondTask = (event, taskId) => {
         event.preventDefault();
 
         updateTask({
             "_id": taskId,
-            "is_responded": !isResponded
+            "respondent": currentUser,
         })
         .then(navigate => {
             setToAuth(navigate);
         });
+    };
+
+    const upvoteTask = (event, taskId) => {
+        event.preventDefault();
+
+        updateTask({
+            "_id": taskId,
+            "upvote": currentUser,
+        })
     };
 
     return (
@@ -77,9 +91,13 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
                 <hr/>
                 <p>{task['title']}</p>
                 <p>Contact: {task['contact']}</p>
+                <p>Upvotes: {task['upvotes']}</p>
+                <p>{task['date_created']}</p>
                 <Button className='respond-button' type='button' text='Respond' 
-                        onClick={(event) => respondTask(event, task['_id'], task['is_responded'])}
-                        style={{background: task['is_responded'] ? '#00cf2e': '#1e1e1e'}}/>
+                        onClick={(event) => respondTask(event, task['_id'])}
+                        style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
+                <Button className='upvote-button' type='button' text='Upvote' 
+                        onClick={(event) => upvoteTask(event, task['_id'])}></Button>
             </div>
             ))}
             </>
@@ -87,9 +105,9 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
 
         {toggleTicket && (
             <form className='ticket-form' onSubmit={createTicket}>
-                <Input className='contanct-entry' name='contact-entry' type='text' placeholder='Contact' required/>
                 <Input className='title-entry' name='title-entry' type='text' placeholder='Title' required/>
                 <Input className='description-entry' name='description-entry' type='text' placeholder='Description'/>
+                <Input className='contanct-entry' name='contact-entry' type='text' placeholder='Contact'/>
                 <Button className='submit-ticket-button' type='submit' text='Create'/>
                 <Button className='back-button' type='button' text='Back' onClick={() => setToggleTicket(false)}/>
             </form>

@@ -26,7 +26,6 @@ const updateTask = (entries) => {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
             resolve(false);
         })
         .catch(() => {
