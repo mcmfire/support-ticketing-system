@@ -1,5 +1,4 @@
-import React from "react";
-import {getToken} from "../../utils/setToken";
+import { setToken, getToken } from "../../utils/setToken";
 import authReset from "../../utils/authReset";
 
 const createTask = (entries) => {
@@ -27,6 +26,12 @@ const createTask = (entries) => {
             return response.json();
         })
         .then(data => {
+            if (data['token']) {
+                const new_access_token = data['token']['access_token'];
+                const new_refresh_token = data['token']['refresh_token'];
+                setToken(new_access_token, new_refresh_token);
+                createTask(entries);
+            }
             resolve(false);
         })
         .catch(() => {

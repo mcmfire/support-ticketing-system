@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import findUser from '../../services/auth/findUser';

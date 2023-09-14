@@ -1,5 +1,3 @@
-import React from 'react';
-
 const registerUser = (entries) => {
     return new Promise((resolve) => {
         fetch('/auth/register-user', {

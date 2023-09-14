@@ -1,6 +1,5 @@
-import React from 'react';
 import authReset from '../../utils/authReset';
-import {setToken, getToken } from '../../utils/setToken';
+import { setToken, getToken } from '../../utils/setToken';
 
 const openPanel = (setTasks) => {
     const {access_token, refresh_token} = getToken();
@@ -30,6 +29,7 @@ const openPanel = (setTasks) => {
                 const new_access_token = data['token']['access_token'];
                 const new_refresh_token = data['token']['refresh_token'];
                 setToken(new_access_token, new_refresh_token);
+                openPanel(setTasks);
             }
             setTasks(data['tasks']);
             resolve(false);

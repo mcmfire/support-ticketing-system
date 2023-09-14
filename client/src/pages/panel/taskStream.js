@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../../components/input/input'
 import Button from '../../components/button/button';
 import createTask from '../../services/panel/createTask';
@@ -10,34 +10,36 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
     const currentUser = sessionStorage.getItem('username');
 
     useEffect(() => {
-        let updatedTasksByDepartment = {};
+        if (tasks) {
+            let updatedTasksByDepartment = {};
 
-        tasks.forEach((task) => {
-            let taskExists = false;
+            tasks.forEach((task) => {
+                let taskExists = false;
 
-            if (!updatedTasksByDepartment[task['department']]) {
-                updatedTasksByDepartment[task['department']] = [];
-            }
+                if (!updatedTasksByDepartment[task['department']]) {
+                    updatedTasksByDepartment[task['department']] = [];
+                }
 
-            for (const department in updatedTasksByDepartment) {
-                const departmentTasks = updatedTasksByDepartment[department];
+                for (const department in updatedTasksByDepartment) {
+                    const departmentTasks = updatedTasksByDepartment[department];
 
-                for (let index = 0; index < departmentTasks.length; index++) {
-                    if (departmentTasks[index]['_id'] === task['_id']) {
-                        departmentTasks[index] = task;
-                        taskExists = true;
-                        break;
+                    for (let index = 0; index < departmentTasks.length; index++) {
+                        if (departmentTasks[index]['_id'] === task['_id']) {
+                            departmentTasks[index] = task;
+                            taskExists = true;
+                            break;
+                        }
                     }
                 }
+                if (!taskExists) {updatedTasksByDepartment[task['department']].push(task);}  
+            });
+            
+            for (const department in updatedTasksByDepartment) {
+                updatedTasksByDepartment[department].sort((taskA, taskB) => taskB['upvotes'] - taskA['upvotes']);
             }
-            if (!taskExists) {updatedTasksByDepartment[task['department']].push(task);}  
-        });
-        
-        for (const department in updatedTasksByDepartment) {
-            updatedTasksByDepartment[department].sort((taskA, taskB) => taskB['upvotes'] - taskA['upvotes']);
-        }
 
-        setTasksByDepartment(updatedTasksByDepartment);
+            setTasksByDepartment(updatedTasksByDepartment);
+        }
     }, [tasks]);
 
     const createTicket = (event) => {
@@ -53,6 +55,7 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
             "description": descriptionInput,
         })
         .then(navigate => {
+            setToggleTicket(false);
             setToAuth(navigate);
         });
     };
@@ -95,7 +98,8 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
                 <p>{task['date_created']}</p>
                 <Button className='respond-button' type='button' text='Respond' 
                         onClick={(event) => respondTask(event, task['_id'])}
-                        style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
+                        style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}
+                        disabled={task['respondent'] && task['respondent'] != currentUser}/>
                 <Button className='upvote-button' type='button' text='Upvote' 
                         onClick={(event) => upvoteTask(event, task['_id'])}></Button>
             </div>

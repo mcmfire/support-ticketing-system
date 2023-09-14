@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskStream from './taskStream';
 import UserStream from './userStream';
 import Dialog from '../../components/dialog/dialog';
 import Button from '../../components/button/button';
-import {openSocket, closeSocket, disconnectSocket, emitSocket} from '../../utils/setSocket';
+import { openSocket, closeSocket, disconnectSocket, emitSocket } from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
 import logoutUser from '../../services/auth/logoutUser';

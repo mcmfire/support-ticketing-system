@@ -1,5 +1,4 @@
-import React from 'react';
-import {setToken, getToken} from '../../utils/setToken';
+import { setToken, getToken } from '../../utils/setToken';
 
 const authenticateUser = (password) => {
     const {access_token, refresh_token} = getToken();
@@ -34,6 +33,7 @@ const authenticateUser = (password) => {
                 const new_access_token = data['token']['access_token'];
                 const new_refresh_token = data['token']['refresh_token'];
                 setToken(new_access_token, new_refresh_token);
+                authenticateUser(password);
             }
             resolve(true);
         })

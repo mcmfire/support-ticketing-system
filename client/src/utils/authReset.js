@@ -1,5 +1,4 @@
-import React from 'react';
-import {closeSocket} from '../utils/setSocket';
+import { closeSocket } from '../utils/setSocket';
 
 const authReset = () => {
     closeSocket('connect');

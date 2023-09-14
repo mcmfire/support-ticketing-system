@@ -1,5 +1,4 @@
-import React from "react";
-import { getToken } from "../../utils/setToken";
+import { setToken, getToken } from "../../utils/setToken";
 import authReset from "../../utils/authReset";
 
 const logoutUser = () => {
@@ -27,7 +26,12 @@ const logoutUser = () => {
             return response.json()
         })
         .then(data => {
-            console.log(data);
+            if (data['token']) {
+                const new_access_token = data['token']['access_token'];
+                const new_refresh_token = data['token']['refresh_token'];
+                setToken(new_access_token, new_refresh_token);
+                logoutUser();
+            }
             resolve(true);
         })
         .catch(() => {
