@@ -16,9 +16,10 @@ def init_socket():
     @socketio.on('join_room')
     def client_join(room):
         if 'user' in session:
+            user_id = session['user']['_id']
             name = session['user']['first_name'] + " " + session['user']['last_name']
             join_room(room)
-            usernames[request.sid] = name
+            usernames[request.sid] = {"user_id": user_id, "name": name}
     
     @socketio.on('leave_room')
     def client_leave(room):

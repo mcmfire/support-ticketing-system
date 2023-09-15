@@ -14,8 +14,7 @@ class AuthService:
         cache_key = f'user_cache={identity}'
         user_cache = cache.get(cache_key)
         
-        if user_cache:
-            return user_cache
+        
         
         user = get_user_data(
                 'auth',
@@ -25,7 +24,16 @@ class AuthService:
                         {"username": identity},
                         {"email": identity}
                     ]
-                }, {'_id': 0})
+                }, {})
+        
+        current_user = session.get('user')
+
+        if not current_user or current_user['username'] != user['username']:
+            user['_id'] = str(user['_id'])
+            session['user'] = user
+        
+        if user_cache:
+            return user_cache
 
         if not user:
             return jsonify({"message": "User not found."}), 401
@@ -33,11 +41,7 @@ class AuthService:
         response = jsonify({"username": user['username']}), 200
 
         cache.set(cache_key, response)
-        current_user = session.get('user')
         
-        if not current_user or current_user['username'] != user['username']:
-            session['user'] = user
-
         return response
 
     @staticmethod

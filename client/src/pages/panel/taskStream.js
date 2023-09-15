@@ -10,36 +10,36 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
     const currentUser = sessionStorage.getItem('username');
 
     useEffect(() => {
-        if (tasks) {
-            let updatedTasksByDepartment = {};
+        if (!tasks) {return;}
 
-            tasks.forEach((task) => {
-                let taskExists = false;
+        let updatedTasksByDepartment = {};
 
-                if (!updatedTasksByDepartment[task['department']]) {
-                    updatedTasksByDepartment[task['department']] = [];
-                }
+        tasks.forEach((task) => {
+            let taskExists = false;
 
-                for (const department in updatedTasksByDepartment) {
-                    const departmentTasks = updatedTasksByDepartment[department];
-
-                    for (let index = 0; index < departmentTasks.length; index++) {
-                        if (departmentTasks[index]['_id'] === task['_id']) {
-                            departmentTasks[index] = task;
-                            taskExists = true;
-                            break;
-                        }
-                    }
-                }
-                if (!taskExists) {updatedTasksByDepartment[task['department']].push(task);}  
-            });
-            
-            for (const department in updatedTasksByDepartment) {
-                updatedTasksByDepartment[department].sort((taskA, taskB) => taskB['upvotes'] - taskA['upvotes']);
+            if (!updatedTasksByDepartment[task['department']]) {
+                updatedTasksByDepartment[task['department']] = [];
             }
 
-            setTasksByDepartment(updatedTasksByDepartment);
+            for (const department in updatedTasksByDepartment) {
+                const departmentTasks = updatedTasksByDepartment[department];
+
+                for (let index = 0; index < departmentTasks.length; index++) {
+                    if (departmentTasks[index]['_id'] === task['_id']) {
+                        departmentTasks[index] = task;
+                        taskExists = true;
+                        break;
+                    }
+                }
+            }
+            if (!taskExists) {updatedTasksByDepartment[task['department']].push(task);}  
+        });
+        
+        for (const department in updatedTasksByDepartment) {
+            updatedTasksByDepartment[department].sort((taskA, taskB) => taskB['upvotes'] - taskA['upvotes']);
         }
+
+        setTasksByDepartment(updatedTasksByDepartment);
     }, [tasks]);
 
     const createTicket = (event) => {

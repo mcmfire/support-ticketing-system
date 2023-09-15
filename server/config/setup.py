@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv, find_dotenv
+import firebase_admin
 
 load_dotenv(find_dotenv())
 
@@ -19,3 +20,7 @@ class AppSettings:
     JWT_HEADER_TYPE = os.environ.get('JWT_HEADER_TYPE') if os.environ.get('JWT_HEADER_TYPE') else 'Bearer'
     JWT_ACCESS_TOKEN_EXPIRES = os.environ.get('JWT_ACCESS_TOKEN_EXPIRES') if os.environ.get('JWT_ACCESS_TOKEN_EXPIRES') else 1800
     JWT_REFRESH_TOKEN_EXPIRES = os.environ.get('JWT_REFRESH_TOKEN_EXPIRES') if os.environ.get('JWT_REFRESH_TOKEN_EXPIRES') else 259200
+
+class FirebaseSettings:
+    CREDENTIALS = firebase_admin.credentials.Certificate('./config/keys/firebase-adminsdk.json')
+    OPTIONS = {"storageBucket": os.environ.get('FIREBASE_STORAGE_BUCKET')}

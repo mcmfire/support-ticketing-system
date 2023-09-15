@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask_jwt_extended import verify_jwt_in_request, jwt_required, get_jwt
 from utils.token import generate_token, revoke_token
 
-excluded_endpoints = ('auth_bp.find_user', 'auth_bp.register_user', 'serve_routes', None)
+excluded_endpoints = ('auth_bp.find_user', 'auth_bp.register_user', 'get_avatar', 'serve_routes', None)
 
 @jwt_required(optional=True, verify_type=False)
 def verify_token():
