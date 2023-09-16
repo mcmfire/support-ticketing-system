@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import getImage from "../../utils/getImage";
 
-const UserStream = ({users}) => {
+const UserStream = ({onlineUsers}) => {
     const [avatarURLs, setAvatarURLs] = useState([]); 
 
     useEffect(() => {
-        if (!users) {return;}
+        if (!onlineUsers) {return;}
 
         const fetchAvatarURLs = async () => {
-            const promises = users.map(async (user) => {
-                const url = await getImage(user['user_id']);
+            const promises = onlineUsers.map(async (onlineUser) => {
+                const url = await getImage(onlineUser['user_id']);
                 return url;
             });
     
@@ -20,13 +20,13 @@ const UserStream = ({users}) => {
         };
     
         fetchAvatarURLs();
-    }, [users]);
+    }, [onlineUsers]);
 
     return (
         <>
-        {users.map((user, index) => (
+        {onlineUsers.map((onlineUser, index) => (
             <div key={`user-${index + 1}`}>
-                <img className={`user-${user['user_id']}`} src={avatarURLs[index]} alt={user['name']} 
+                <img className={`user-${onlineUser['user_id']}`} src={avatarURLs[index]} alt={onlineUser['username']} 
                     style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '100px', width: '100px'}}></img>
             </div>
         ))}

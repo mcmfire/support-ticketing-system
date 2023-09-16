@@ -9,14 +9,21 @@ class PanelService:
     @staticmethod
     def load_panel():
         task_list = []
+        user_list = []
+
         tasks = get_user_data('data', 'tasks', {}, {}, 'all')
-        
+        users = get_user_data('auth', 'profiles', {}, {}, 'all')
+
         for task in tasks:
             task['_id'] = str(task['_id'])
             task['upvotes'] = len(task['upvotes'])
             task_list.append(task)
+        
+        for user in users:
+            user['_id'] = str(user['_id'])
+            user_list.append(user)
 
-        return jsonify({"tasks": task_list}), 200
+        return jsonify({"tasks": task_list, "user": user_list}), 200
     
     @staticmethod
     def add_task(contact, title, description):
@@ -34,8 +41,7 @@ class PanelService:
             document = {}
 
             for key, value in vars(task).items():
-                if value != '':
-                    document.update({key:value})
+                document.update({key:value})
 
             pymongo.cx['data']['tasks'].insert_one(document)
             document['_id'] = str(document['_id'])
@@ -61,7 +67,7 @@ class PanelService:
 
         task = get_user_data('data', 'tasks', query_filter,
                                 {"_id": 0, "username": 0, "reporter": 0, "department": 0, 
-                                    "position": 0, "contact": 0, "title": 0, "date_created": 0})
+                                "position": 0, "contact": 0, "title": 0, "date_created": 0})
         
         if "upvote" in args:
             if args['upvote'] not in task['upvotes']:

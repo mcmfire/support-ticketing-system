@@ -3,7 +3,7 @@ from flask_socketio import emit, join_room, leave_room
 from utils.extensions import socketio
 
 def init_socket():
-    usernames = {}
+    users = {}
 
     @socketio.on('connect')
     def client_connect():
@@ -17,20 +17,21 @@ def init_socket():
     def client_join(room):
         if 'user' in session:
             user_id = session['user']['_id']
+            username = session['user']['username']
             name = session['user']['first_name'] + " " + session['user']['last_name']
             join_room(room)
-            usernames[request.sid] = {"user_id": user_id, "name": name}
+            users[request.sid] = {"user_id": user_id, "username": username, "name": name}
     
     @socketio.on('leave_room')
     def client_leave(room):
-        if request.sid in usernames:
+        if request.sid in users:
             leave_room(room)
-            usernames.pop(request.sid)
+            users.pop(request.sid)
     
     @socketio.on('room_members')
     def room_members(room):
         members = socketio.server.manager.get_participants(room=room, namespace='/')
-        emit('room_members', [usernames[member[0]] for member in members], broadcast=True)
+        emit('room_members', [users[member[0]] for member in members], broadcast=True)
 
     @socketio.on('task')
     def client_task(task):

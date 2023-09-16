@@ -79,7 +79,18 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
             "_id": taskId,
             "upvote": currentUser,
         })
+        .then(navigate => setToAuth(navigate));
     };
+
+    const finishTask = (event, taskId) => {
+        event.preventDefault();
+
+        updateTask({
+            "_id": taskId,
+            "finished": true,
+        })
+        .then(navigate => setToAuth(navigate));
+    }
 
     return (
         <>
@@ -89,19 +100,33 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
             <hr/>
             {tasksByDepartment[department].map((task, index) => (
                 <div key={`task-${index + 1}`} className='ticket-container'>
-                <h2>{task['reporter']}</h2>
-                <h3>{task['position']}</h3>
-                <hr/>
-                <p>{task['title']}</p>
-                <p>Contact: {task['contact']}</p>
-                <p>Upvotes: {task['upvotes']}</p>
-                <p>{task['date_created']}</p>
-                <Button className='respond-button' type='button' text='Respond' 
+                {!task['finished'] && (
+                    <>
+                    <h2>{task['reporter']}</h2>
+                    <h3>{task['position']}</h3>
+                    <hr/>
+                    <p>{task['title']}</p>
+                    <p>Contact: {task['contact']}</p>
+                    <p>Upvotes: {task['upvotes']}</p>
+                    <p>{task['date_created']}</p>
+                    </>
+                )}
+                {(!task['finished'] && task['username'] != currentUser) && (
+                    <>
+                    <Button className='respond-button' type='button' text='Respond' 
                         onClick={(event) => respondTask(event, task['_id'])}
-                        style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}
-                        disabled={task['respondent'] && task['respondent'] != currentUser}/>
-                <Button className='upvote-button' type='button' text='Upvote' 
-                        onClick={(event) => upvoteTask(event, task['_id'])}></Button>
+                        style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
+                    <Button className='upvote-button' type='button' text='Upvote' 
+                            onClick={(event) => upvoteTask(event, task['_id'])}></Button>
+                    </>
+                )}
+                {(!task['finished'] && task['respondent'] && task['username'] == currentUser) && (
+                    <>
+                    <Button className='finish-button' type='button' text='Finish' 
+                        onClick={(event) => finishTask(event, task['_id'])}
+                        style={{background: task['respondent'] ? '#d10000': '#1e1e1e'}}/>
+                    </>
+                )}
             </div>
             ))}
             </>

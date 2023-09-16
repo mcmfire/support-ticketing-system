@@ -13,7 +13,7 @@ const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
     const [toggleTicket, setToggleTicket] = useState(false);
     const [tasks, setTasks] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
         openSocket('connect', () => {
@@ -22,7 +22,7 @@ const Panel = () => {
             console.log('[CLIENT]: ', 'Connected to the server.');
         });
         openSocket('room_members', (members) => {
-            Array.isArray(members) ? setUsers(members) : emitSocket('room_members', 'admin_room');
+            Array.isArray(members) ? setOnlineUsers(members) : emitSocket('room_members', 'admin_room');
         });
         openSocket('task', (newTask) => {
             setTasks((previousTasks) => [...previousTasks, newTask]);
@@ -75,7 +75,7 @@ const Panel = () => {
             <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
             <TaskStream tasks={tasks} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} setToAuth={setToAuth}/>
-            <UserStream users={users}/>
+            <UserStream onlineUsers={onlineUsers}/>
         </>
     );
 };
