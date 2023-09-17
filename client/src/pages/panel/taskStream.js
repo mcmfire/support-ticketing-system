@@ -5,7 +5,7 @@ import createTask from '../../services/panel/createTask';
 import updateTask from '../../services/panel/updateTask';
 import './style.css';
 
-const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
+const TaskStream = ({tasks, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
     const [tasksByDepartment, setTasksByDepartment] = useState({});
     const currentUser = sessionStorage.getItem('username');
 
@@ -41,6 +41,10 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
 
         setTasksByDepartment(updatedTasksByDepartment);
     }, [tasks]);
+
+    const isFinished = (finished) => {
+        return toggleFinishedTasks ? !finished : finished;
+    };
 
     const createTicket = (event) => {
         event.preventDefault();
@@ -99,8 +103,9 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
             <h1>{department}</h1>
             <hr/>
             {tasksByDepartment[department].map((task, index) => (
-                <div key={`task-${index + 1}`} className='ticket-container'>
-                {!task['finished'] && (
+                <div key={`task-${index + 1}`} className='ticket-container' 
+                    style={{display: isFinished(task['finished']) ? 'none' : 'block'}}>
+                {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
                     <>
                     <h2>{task['reporter']}</h2>
                     <h3>{task['position']}</h3>
@@ -111,7 +116,7 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
                     <p>{task['date_created']}</p>
                     </>
                 )}
-                {(!task['finished'] && task['username'] != currentUser) && (
+                {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
                     <>
                     <Button className='respond-button' type='button' text='Respond' 
                         onClick={(event) => respondTask(event, task['_id'])}
@@ -120,7 +125,7 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, setToAuth}) => {
                             onClick={(event) => upvoteTask(event, task['_id'])}></Button>
                     </>
                 )}
-                {(!task['finished'] && task['respondent'] && task['username'] == currentUser) && (
+                {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (
                     <>
                     <Button className='finish-button' type='button' text='Finish' 
                         onClick={(event) => finishTask(event, task['_id'])}

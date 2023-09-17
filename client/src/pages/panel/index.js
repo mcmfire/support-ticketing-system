@@ -12,6 +12,7 @@ import authReset from '../../utils/authReset';
 const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
     const [toggleTicket, setToggleTicket] = useState(false);
+    const [toggleFinishedTasks, setToggleFinishedTasks] = useState(false);
     const [tasks, setTasks] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState([]);
 
@@ -73,8 +74,11 @@ const Panel = () => {
         )}
             <h1>Panel Page.</h1>
             <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
+            <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
+                    onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
-            <TaskStream tasks={tasks} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} setToAuth={setToAuth}/>
+            <TaskStream tasks={tasks} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
+                        toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth} />
             <UserStream onlineUsers={onlineUsers}/>
         </>
     );
