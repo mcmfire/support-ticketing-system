@@ -23,7 +23,7 @@ class PanelService:
             user['_id'] = str(user['_id'])
             user_list.append(user)
 
-        return jsonify({"tasks": task_list, "user": user_list}), 200
+        return jsonify({"tasks": task_list, "users": user_list}), 200
     
     @staticmethod
     def add_task(contact, title, description):

@@ -14,6 +14,7 @@ const Panel = () => {
     const [toggleTicket, setToggleTicket] = useState(false);
     const [toggleFinishedTasks, setToggleFinishedTasks] = useState(false);
     const [tasks, setTasks] = useState([]);
+    const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
@@ -49,7 +50,7 @@ const Panel = () => {
     }, []);
 
     useEffect(() => {
-        openPanel(setTasks)
+        openPanel(setTasks, setUsers)
         .then(navigate => {
             if (navigate) {
                 authReset();
@@ -77,7 +78,7 @@ const Panel = () => {
             <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
                     onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
-            <TaskStream tasks={tasks} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
+            <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
                         toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth} />
             <UserStream onlineUsers={onlineUsers}/>
         </>

@@ -5,7 +5,7 @@ import createTask from '../../services/panel/createTask';
 import updateTask from '../../services/panel/updateTask';
 import './style.css';
 
-const TaskStream = ({tasks, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
+const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
     const [tasksByDepartment, setTasksByDepartment] = useState({});
     const currentUser = sessionStorage.getItem('username');
 
@@ -45,6 +45,13 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, toggleFinishedTasks, 
     const isFinished = (finished) => {
         return toggleFinishedTasks ? !finished : finished;
     };
+
+    const getName = (username) => {
+        const user = users.find((user) => user['username'] == username);
+        const name = user['first_name'] + ' ' + user['last_name'];
+
+        return name;
+    }
 
     const createTicket = (event) => {
         event.preventDefault();
@@ -112,6 +119,7 @@ const TaskStream = ({tasks, toggleTicket, setToggleTicket, toggleFinishedTasks, 
                     <hr/>
                     <p>{task['title']}</p>
                     <p>Contact: {task['contact']}</p>
+                    <p>{task['respondent'] ? `Respondent: ${getName(task['respondent'])}` : null}</p>
                     <p>Upvotes: {task['upvotes']}</p>
                     <p>{task['date_created']}</p>
                     </>
