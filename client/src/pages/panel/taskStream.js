@@ -105,46 +105,51 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
 
     return (
         <>
-        {Object.keys(tasksByDepartment).map((department) => (
+        {!toggleTicket && (
             <>
-            <h1>{department}</h1>
-            <hr/>
-            {tasksByDepartment[department].map((task, index) => (
-                <div key={`task-${index + 1}`} className='ticket-container' 
-                    style={{display: isFinished(task['finished']) ? 'none' : 'block'}}>
-                {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
-                    <>
-                    <h2>{task['reporter']}</h2>
-                    <h3>{task['position']}</h3>
-                    <hr/>
-                    <p>{task['title']}</p>
-                    <p>Contact: {task['contact']}</p>
-                    <p>{task['respondent'] ? `Respondent: ${getName(task['respondent'])}` : null}</p>
-                    <p>Upvotes: {task['upvotes']}</p>
-                    <p>{task['date_created']}</p>
-                    </>
-                )}
-                {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
-                    <>
-                    <Button className='respond-button' type='button' text='Respond' 
-                        onClick={(event) => respondTask(event, task['_id'])}
-                        style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
-                    <Button className='upvote-button' type='button' text='Upvote' 
-                            onClick={(event) => upvoteTask(event, task['_id'])}></Button>
-                    </>
-                )}
-                {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (
-                    <>
-                    <Button className='finish-button' type='button' text='Finish' 
-                        onClick={(event) => finishTask(event, task['_id'])}
-                        style={{background: task['respondent'] ? '#d10000': '#1e1e1e'}}/>
-                    </>
-                )}
-            </div>
+            {Object.keys(tasksByDepartment).map((department) => (
+                <>
+                <h1>{department}</h1>
+                <hr/>
+                <div className='task-container'>
+                {tasksByDepartment[department].map((task, index) => (
+                    <div key={`task-${index + 1}`} className='ticket-container' 
+                        style={{display: isFinished(task['finished']) ? 'none' : 'block'}}>
+                        {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
+                            <>
+                            <h2>{task['reporter']}</h2>
+                            <h3>{task['position']}</h3>
+                            <hr/>
+                            <p>{task['title']}</p>
+                            <p>Contact: {task['contact']}</p>
+                            <p>{task['respondent'] ? `Respondent: ${getName(task['respondent'])}` : null}</p>
+                            <p>Upvotes: {task['upvotes']}</p>
+                            <p>{task['date_created']}</p>
+                            </>
+                        )}
+                        {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
+                            <>
+                            <Button className='respond-button' type='button' text='Respond' 
+                                onClick={(event) => respondTask(event, task['_id'])}
+                                style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
+                            <Button className='upvote-button' type='button' text='Upvote' 
+                                    onClick={(event) => upvoteTask(event, task['_id'])}></Button>
+                            </>
+                        )}
+                        {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (
+                            <>
+                            <Button className='finish-button' type='button' text='Finish' 
+                                onClick={(event) => finishTask(event, task['_id'])}
+                                style={{background: task['respondent'] ? '#d10000': '#1e1e1e'}}/>
+                            </>
+                        )}
+                    </div>
+                    ))}
+                </div>
+                </>
             ))}
             </>
-        ))}
-
+        )}
         {toggleTicket && (
             <form className='ticket-form' onSubmit={createTicket}>
                 <Input className='title-entry' name='title-entry' type='text' placeholder='Title' required/>

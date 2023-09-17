@@ -73,14 +73,22 @@ const Panel = () => {
         {toAuth && (
             <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
         )}
+        {(!toAuth && !toggleTicket) && (
+            <>
             <h1>Panel Page.</h1>
             <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
             <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
                     onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
+            </>
+        )}
+        {!toAuth && (
+            <>
             <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
                         toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth} />
             <UserStream onlineUsers={onlineUsers}/>
+            </>
+        )}
         </>
     );
 };

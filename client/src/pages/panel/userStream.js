@@ -23,14 +23,14 @@ const UserStream = ({onlineUsers}) => {
     }, [onlineUsers]);
 
     return (
-        <>
+        <div className="user-container">
         {onlineUsers.map((onlineUser, index) => (
             <div key={`user-${index + 1}`}>
-                <img className={`user-${onlineUser['user_id']}`} src={avatarURLs[index]} alt={onlineUser['username']} 
+                <img className={`user-avatar`} src={avatarURLs[index]} alt={onlineUser['username']} 
                     style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '100px', width: '100px'}}></img>
             </div>
         ))}
-        </>
+        </div>
     );
 };
 
