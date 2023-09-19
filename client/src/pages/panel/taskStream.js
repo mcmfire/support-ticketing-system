@@ -6,6 +6,7 @@ import updateTask from '../../services/panel/updateTask';
 import './style.css';
 
 const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
+    const [toggleModifyTask, setToggleModifyTask] = useState(false);
     const [tasksByDepartment, setTasksByDepartment] = useState({});
     const currentUser = sessionStorage.getItem('username');
 
@@ -56,14 +57,14 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
     const createTicket = (event) => {
         event.preventDefault();
 
-        const contactInput = event.target.elements['contact-entry'].value;
         const titleInput = event.target.elements['title-entry'].value;
         const descriptionInput = event.target.elements['description-entry'].value;
+        const contactInput = event.target.elements['contact-entry'].value;
 
         createTask({
-            "contact": contactInput,
             "title": titleInput,
             "description": descriptionInput,
+            "contact": contactInput,
         })
         .then(navigate => {
             setToggleTicket(false);
@@ -103,6 +104,23 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
         .then(navigate => setToAuth(navigate));
     }
 
+    const editTask = (event, taskId) => {
+        event.preventDefault();
+        
+        const titleInput = event.target.elements['modify-title-entry'].value;
+        const contactInput = event.target.elements['modify-contact-entry'].value;
+
+        updateTask({
+            "_id": taskId,
+            "title": titleInput,
+            "contact": contactInput,
+        })
+        .then(navigate => {
+            setToggleModifyTask(false);
+            setToAuth(navigate);
+        });
+    };
+
     return (
         <>
         {!toggleTicket && (
@@ -120,12 +138,32 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                             <h2>{task['reporter']}</h2>
                             <h3>{task['position']}</h3>
                             <hr/>
-                            <p>{task['title']}</p>
-                            <p>Contact: {task['contact']}</p>
+                            {(!toggleModifyTask && (
+                                <>
+                                <p>{task['title']}</p>
+                                <p>{task['contact'] ? `Contact: ${task['contact']}` : null}</p>
+                                </>
+                            ))}
+                            {(toggleModifyTask && (
+                                <form className='task-form' onSubmit={(event) => editTask(event, task['_id'])}>
+                                    <Input className='modify-title-entry' name='modify-title-entry' type='text'
+                                            placeholder='Title' required/>
+                                    <Input className='modify-contact-entry' name='modify-contact-entry' type='text'
+                                            placeholder='Contact'/>
+                                    <Button className='save-button' type='submit' text='Save'/>
+                                    <Button className='cancel-button' type='button' text='Cancel'
+                                            onClick={() => setToggleModifyTask(false)}/>
+                                </form>
+                            ))}
                             <p>{task['respondent'] ? `Respondent: ${getName(task['respondent'])}` : null}</p>
                             <p>Upvotes: {task['upvotes']}</p>
                             <p>{task['date_created']}</p>
                             </>
+                        )}
+                        {(!toggleFinishedTasks && !task['finished'] && 
+                            task['username'] == currentUser && !toggleModifyTask) && (
+                            <Button className='modify-button' type='button' text='Modify' 
+                                    onClick={() => setToggleModifyTask(true)}/>
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
                             <>
