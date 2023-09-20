@@ -1,7 +1,7 @@
 from flask import jsonify, session
 from models.task import Task
 from utils.extensions import pymongo, socketio
-from utils.db import get_user_data, update_user_data
+from utils.db import get_user_data, update_user_data, delete_user_data
 from utils.variables import Response
 from bson import ObjectId
 
@@ -46,7 +46,7 @@ class PanelService:
             pymongo.cx['data']['tasks'].insert_one(document)
             document['_id'] = str(document['_id'])
             document['upvotes'] = len(document['upvotes'])
-            socketio.emit('task', document)
+            socketio.emit('add_task', document)
 
             return jsonify({"message": "Task created."}), 200
         
@@ -84,6 +84,16 @@ class PanelService:
         updated_document = update_user_data('data', 'tasks', query_filter, data)
         updated_document['_id'] = str(updated_document['_id'])
         updated_document['upvotes'] = len(updated_document['upvotes'])
-        socketio.emit('task', updated_document)
+        socketio.emit('add_task', updated_document)
 
         return jsonify({"message": "Task updated."}), 200
+    
+    @staticmethod
+    def remove_task(**args):
+        deleted = delete_user_data('data', 'tasks', {"_id": args['_id']})
+        
+        if deleted:
+            socketio.emit('remove_task', args['_id'])
+            return jsonify({"message": "Task removed."}), 200
+        
+        return Response().undefined

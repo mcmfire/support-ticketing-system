@@ -3,10 +3,11 @@ import Input from '../../components/input/input'
 import Button from '../../components/button/button';
 import createTask from '../../services/panel/createTask';
 import updateTask from '../../services/panel/updateTask';
+import deleteTask from '../../services/panel/deleteTask';
 import './style.css';
 
 const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
-    const [toggleModifyTask, setToggleModifyTask] = useState(false);
+    const [toggleModifyTask, setToggleModifyTask] = useState('');
     const [tasksByDepartment, setTasksByDepartment] = useState({});
     const currentUser = sessionStorage.getItem('username');
 
@@ -116,9 +117,18 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
             "contact": contactInput,
         })
         .then(navigate => {
-            setToggleModifyTask(false);
+            if (!navigate) {
+                setToggleModifyTask('');
+            }
             setToAuth(navigate);
         });
+    };
+
+    const removeTask = (event, taskId) => {
+        event.preventDefault();
+
+        deleteTask({"_id": taskId})
+        .then(navigate => setToAuth(navigate));
     };
 
     return (
@@ -138,13 +148,13 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                             <h2>{task['reporter']}</h2>
                             <h3>{task['position']}</h3>
                             <hr/>
-                            {(!toggleModifyTask && (
+                            {((!toggleModifyTask || toggleModifyTask != task['_id']) && (
                                 <>
                                 <p>{task['title']}</p>
                                 <p>{task['contact'] ? `Contact: ${task['contact']}` : null}</p>
                                 </>
                             ))}
-                            {(toggleModifyTask && (
+                            {((toggleModifyTask && toggleModifyTask == task['_id']) && (
                                 <form className='task-form' onSubmit={(event) => editTask(event, task['_id'])}>
                                     <Input className='modify-title-entry' name='modify-title-entry' type='text'
                                             placeholder='Title' required/>
@@ -152,7 +162,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                                             placeholder='Contact'/>
                                     <Button className='save-button' type='submit' text='Save'/>
                                     <Button className='cancel-button' type='button' text='Cancel'
-                                            onClick={() => setToggleModifyTask(false)}/>
+                                            onClick={() => setToggleModifyTask('')}/>
                                 </form>
                             ))}
                             <p>{task['respondent'] ? `Respondent: ${getName(task['respondent'])}` : null}</p>
@@ -162,8 +172,12 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && 
                             task['username'] == currentUser && !toggleModifyTask) && (
+                            <>
                             <Button className='modify-button' type='button' text='Modify' 
-                                    onClick={() => setToggleModifyTask(true)}/>
+                                    onClick={() => setToggleModifyTask(task['_id'])}/>
+                            <Button className='delete-button' type='button' text='Delete'
+                                    onClick={(event) => removeTask(event, task['_id'])}/>
+                            </>
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
                             <>
@@ -171,7 +185,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                                 onClick={(event) => respondTask(event, task['_id'])}
                                 style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
                             <Button className='upvote-button' type='button' text='Upvote' 
-                                    onClick={(event) => upvoteTask(event, task['_id'])}></Button>
+                                    onClick={(event) => upvoteTask(event, task['_id'])}/>
                             </>
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (

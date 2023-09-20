@@ -33,9 +33,9 @@ def init_socket():
         members = socketio.server.manager.get_participants(room=room, namespace='/')
         emit('room_members', [users[member[0]] for member in members], broadcast=True)
 
-    @socketio.on('task')
+    @socketio.on('add_task')
     def client_task(task):
-        emit('task', task, broadcast=True)
+        emit('add_task', task, broadcast=True)
 
     @socketio.on('connect_error')
     def client_disconnect():

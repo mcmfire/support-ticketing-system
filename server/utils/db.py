@@ -1,4 +1,5 @@
 from utils.extensions import pymongo
+from bson import ObjectId
 
 def get_user_data(db, collection, filter, projection={}, amount='one'):
     collection_query = pymongo.cx[db][collection]
@@ -26,3 +27,18 @@ def update_user_data(db, collection, filter, data, amount='one'):
         return None
     
     return document
+
+def delete_user_data(db, collection, filter, amount='one'):
+    collection_query = pymongo.cx[db][collection]
+
+    if '_id' in filter:
+        filter['_id'] = ObjectId(filter['_id'])
+        
+    if amount == 'one':
+        collection_query.delete_one(filter)
+        return True
+    elif amount == 'all':
+        collection_query.delete_many(filter)
+        return True
+    
+    return False

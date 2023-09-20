@@ -26,8 +26,11 @@ const Panel = () => {
         openSocket('room_members', (members) => {
             Array.isArray(members) ? setOnlineUsers(members) : emitSocket('room_members', 'admin_room');
         });
-        openSocket('task', (newTask) => {
+        openSocket('add_task', (newTask) => {
             setTasks((previousTasks) => [...previousTasks, newTask]);
+        });
+        openSocket('remove_task', (taskId) => {
+            setTasks((previousTasks) => previousTasks.filter(previousTasks => previousTasks['_id'] !== taskId));
         });
         openSocket('disconnect', () => {
             emitSocket('leave_room', 'admin_room');

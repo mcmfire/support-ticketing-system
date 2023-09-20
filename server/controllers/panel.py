@@ -24,3 +24,10 @@ class PanelController(PanelService):
         response = self.modify_task(**user_input)
 
         return response
+    
+    def delete_task(self):
+        data = request.get_json()
+        user_input = filter_input(**data)
+        response = self.remove_task(**user_input)
+
+        return response
