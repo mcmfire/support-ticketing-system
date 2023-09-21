@@ -10,6 +10,7 @@ route_require = {
     "panel_bp.update_task": ('_id', 'department', 'position', 'contact', 'title', 
                              'description', 'upvote', 'respondent', 'finished'),
     "panel_bp.delete_task": ('_id', ),
+    "settings_bp.update_account": ('_id', 'email', 'username', 'first_name', 'last_name'),
 }
 
 def hash_input(data):

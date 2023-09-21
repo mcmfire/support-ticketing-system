@@ -29,28 +29,28 @@ class PanelService:
     def add_task(contact, title, description):
         current_user = session.get('user')
         
-        if current_user:
-            user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
-                                {"_id" :0, "email": 0})
-            username = user['username']
-            reporter = user['first_name'] + " " + user['last_name']
-            position = user['position']
-            department = user['department']
-            task = Task(username, reporter, position, department, title, description, contact)
-            
-            document = {}
-
-            for key, value in vars(task).items():
-                document.update({key:value})
-
-            pymongo.cx['data']['tasks'].insert_one(document)
-            document['_id'] = str(document['_id'])
-            document['upvotes'] = len(document['upvotes'])
-            socketio.emit('add_task', document)
-
-            return jsonify({"message": "Task created."}), 200
+        if not current_user:
+            return Response().undefined
         
-        return Response().undefined
+        user = get_user_data('auth', 'profiles', {"username": current_user['username']}, 
+                            {"_id" :0, "email": 0})
+        username = user['username']
+        reporter = user['first_name'] + " " + user['last_name']
+        position = user['position']
+        department = user['department']
+        task = Task(username, reporter, position, department, title, description, contact)
+        
+        document = {}
+
+        for key, value in vars(task).items():
+            document.update({key:value})
+
+        pymongo.cx['data']['tasks'].insert_one(document)
+        document['_id'] = str(document['_id'])
+        document['upvotes'] = len(document['upvotes'])
+        socketio.emit('add_task', document)
+
+        return jsonify({"message": "Task created."}), 200
     
     @staticmethod
     def modify_task(**args):
@@ -92,8 +92,9 @@ class PanelService:
     def remove_task(**args):
         deleted = delete_user_data('data', 'tasks', {"_id": args['_id']})
         
-        if deleted:
-            socketio.emit('remove_task', args['_id'])
-            return jsonify({"message": "Task removed."}), 200
+        if not deleted:
+            return Response().undefined
         
-        return Response().undefined
+        socketio.emit('remove_task', args['_id'])
+        
+        return jsonify({"message": "Task removed."}), 200
