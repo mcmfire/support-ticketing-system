@@ -12,3 +12,8 @@ class SettingsController(SettingsService):
         response = self.modify_account(**user_input)
 
         return response
+    
+    def delete_account(self):
+        response = self.remove_account()
+
+        return response

@@ -14,8 +14,6 @@ class AuthService:
         cache_key = f'user_cache={identity}'
         user_cache = cache.get(cache_key)
         
-        
-        
         user = get_user_data(
                 'auth',
                 'profiles',
@@ -139,5 +137,3 @@ class AuthService:
         user_data_cleanup(cache_key)
 
         return jsonify({"message": "Logout successful."}), 200
-        
-        
