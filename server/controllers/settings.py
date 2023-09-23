@@ -14,6 +14,8 @@ class SettingsController(SettingsService):
         return response
     
     def delete_account(self):
-        response = self.remove_account()
+        data = request.get_json()
+        user_input = filter_input(**data)
+        response = self.remove_account(**user_input)
 
         return response

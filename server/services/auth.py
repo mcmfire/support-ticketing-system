@@ -24,6 +24,9 @@ class AuthService:
                     ]
                 }, {})
         
+        if not user:
+            return jsonify({"message": "User not found."}), 401
+
         current_user = session.get('user')
 
         if not current_user or current_user['username'] != user['username']:
@@ -32,9 +35,6 @@ class AuthService:
         
         if user_cache:
             return user_cache
-
-        if not user:
-            return jsonify({"message": "User not found."}), 401
 
         response = jsonify({"username": user['username']}), 200
 
@@ -94,7 +94,9 @@ class AuthService:
             profiles = {
                 "username": new_user.username,
                 "first_name": new_user.first_name,
-                "last_name": new_user.last_name
+                "last_name": new_user.last_name,
+                "department": new_user.department,
+                "position": new_user.position,
             }
             
             if email:

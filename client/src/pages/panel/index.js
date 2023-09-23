@@ -7,6 +7,7 @@ import { openSocket, closeSocket, disconnectSocket, emitSocket } from '../../uti
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
 import logoutUser from '../../services/auth/logoutUser';
+import deleteUser from '../../services/settings/deleteUser';
 import authReset from '../../utils/authReset';
 
 const Panel = () => {
@@ -65,6 +66,16 @@ const Panel = () => {
 
     const endSession = () => {
         logoutUser()
+        .then((navigate) => {
+            if (navigate) {
+                authReset();
+                UserRedirect('/auth');
+            }
+        });
+    };
+
+    const removeUser = () => {
+        deleteUser()
         .then(() => {
             authReset();
             UserRedirect('/auth');
@@ -83,6 +94,7 @@ const Panel = () => {
             <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
                     onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
+            <Button className='delete-account-button' type='button' text='Delete Account' onClick={removeUser}/>
             </>
         )}
         {!toAuth && (

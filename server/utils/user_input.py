@@ -11,6 +11,7 @@ route_require = {
                              'description', 'upvote', 'respondent', 'finished'),
     "panel_bp.delete_task": ('_id', ),
     "settings_bp.update_account": ('_id', 'email', 'username', 'first_name', 'last_name'),
+    "settings_bp.delete_account": ('refresh_token', ),
 }
 
 def hash_input(data):
