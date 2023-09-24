@@ -1,4 +1,4 @@
-from flask import send_file, request
+from flask import send_file
 from firebase_admin import storage
 from io import BytesIO
 
@@ -9,3 +9,10 @@ def init_firebase_route(app):
         data = blob.download_as_bytes()
 
         return send_file(BytesIO(data), mimetype='image/jpeg')
+    
+def create_avatar(filename):
+    blob = storage.bucket().blob('avatars/default.jpg')
+    data = blob.download_as_bytes()
+
+    avatar_blob = storage.bucket().blob(f'avatars/{filename}.jpg')
+    avatar_blob.upload_from_string(data, content_type='image/jpeg')

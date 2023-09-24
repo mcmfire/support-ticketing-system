@@ -34,7 +34,7 @@ class SettingsService:
         
         tasks_deleted = delete_user_data('data', 'tasks', {"username": current_user['username']})
         creds_deleted = delete_user_data('auth', 'credentials', {"username": current_user['username']})
-        profile_deleted = delete_user_data('auth', 'profiles', {"_id": current_user['_id']})
+        profile_deleted = delete_user_data('auth', 'profiles', {"username": current_user['username']})
 
         if tasks_deleted and creds_deleted and profile_deleted:
             AuthService().revoke_user(refresh_token)

@@ -6,6 +6,7 @@ from utils.extensions import pymongo, cache
 from utils.cleanup import user_data_cleanup
 from utils.token import generate_token, revoke_token
 from utils.db import get_user_data
+from utils.firebase import create_avatar
 from utils.user_input import check_hash_input
 
 class AuthService:
@@ -105,6 +106,9 @@ class AuthService:
 
             pymongo.cx['auth']['credentials'].insert_one(credentials)
             pymongo.cx['auth']['profiles'].insert_one(profiles)
+
+            new_user = get_user_data('auth', 'profiles', {"username": new_user.username})
+            create_avatar(new_user['_id'])
 
             return jsonify({"message": "User has been saved."}), 200
         
