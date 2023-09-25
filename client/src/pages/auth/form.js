@@ -41,8 +41,11 @@ const Form = () => {
             "first_name": fnameInput,
             "last_name": lnameInput,
             "email": emailInput,
-        })
-        .then(navigate => navigate ? console.log('User registered.') : console.log('User not registered'));
+            }
+        )
+        .then(navigate => {
+            navigate ? setToPanel(true) : console.log('User not registered');
+        });
     };
 
     const goBack = (event) => {

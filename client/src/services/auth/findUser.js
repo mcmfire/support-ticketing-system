@@ -14,12 +14,9 @@ const findUser = (identity, setUsername = null, setToggleNext = null) => {
         .then(data => {
             if (setUsername && setToggleNext) {
                 setUsername(data['username']);
-            
-                if (data['username']) {
-                    sessionStorage.setItem('username', data['username']);
-                    setToggleNext(true);
-                }
+                setToggleNext(true);
             }
+            sessionStorage.setItem('username', data['username']);
             resolve(data);
         })
         .catch(() => {

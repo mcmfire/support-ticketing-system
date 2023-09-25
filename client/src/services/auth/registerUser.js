@@ -1,3 +1,6 @@
+import findUser from './findUser';
+import authenticateUser from './authenticateUser';
+
 const registerUser = (entries) => {
     return new Promise((resolve) => {
         fetch('/auth/register-user', {
@@ -11,7 +14,17 @@ const registerUser = (entries) => {
             }
             return response.json();
         })
-        .then(data => resolve(true))
+        .then(data => {
+            findUser(entries['username'])
+            .then(user => {
+                if (user) {
+                    authenticateUser(entries['password'])
+                    .then(navigate => {
+                        resolve(navigate);
+                    });
+                }
+            });
+        })
         .catch(() => resolve(false));
     });
 };
