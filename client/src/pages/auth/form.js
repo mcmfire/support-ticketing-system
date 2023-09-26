@@ -36,6 +36,11 @@ const Form = () => {
         const lnameInput = event.target.elements['lname-register-entry'].value;
         const emailInput = event.target.elements['email-register-entry'].value;
         
+        if (passwordInput.length < 8 || passwordInput.length > 16) {
+            console.log('Password must be between 8 and 16 characters long.');
+            return;
+        }
+
         if (passwordInput === cpasswordInput) {
             registerUser({
                 "username": usernameInput,
