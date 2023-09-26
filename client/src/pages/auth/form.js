@@ -31,21 +31,27 @@ const Form = () => {
         event.preventDefault();
         const usernameInput = event.target.elements['username-register-entry'].value;
         const passwordInput = event.target.elements['password-register-entry'].value;
+        const cpasswordInput = event.target.elements['cpassword-register-entry'].value;
         const fnameInput = event.target.elements['fname-register-entry'].value;
         const lnameInput = event.target.elements['lname-register-entry'].value;
         const emailInput = event.target.elements['email-register-entry'].value;
         
-        registerUser({
-            "username": usernameInput,
-            "password": passwordInput,
-            "first_name": fnameInput,
-            "last_name": lnameInput,
-            "email": emailInput,
-            }
-        )
-        .then(navigate => {
-            navigate ? setToPanel(true) : console.log('User not registered');
-        });
+        if (passwordInput === cpasswordInput) {
+            registerUser({
+                "username": usernameInput,
+                "password": passwordInput,
+                "first_name": fnameInput,
+                "last_name": lnameInput,
+                "email": emailInput,
+                }
+            )
+            .then(navigate => {
+                navigate ? setToPanel(true) : console.log('User not registered');
+            });
+        }
+        else {
+            console.log('Password does not match.');
+        }
     };
 
     const goBack = (event) => {
@@ -86,6 +92,8 @@ const Form = () => {
                             type='text' placeholder='Username' required/>
                     <Input className='password-entry' name='password-register-entry' 
                             type='password' placeholder='Password' required/>
+                    <Input className='cpassword-entry' name='cpassword-register-entry'
+                            type='password' placeholder='Confirm Password' required/>
                     <Input className='fname-entry' name='fname-register-entry' 
                             type='text' placeholder='First Name' required/>
                     <Input className='lname-entry' name='lname-register-entry' 

@@ -112,9 +112,7 @@ class AuthService:
 
             return jsonify({"message": "User has been saved."}), 200
         
-        if user['username'] == username and user['email'] == email:
-            return jsonify({"message": "Username and Email already exists!"}), 409
-        elif user['username'] == username:
+        if user['username'] == username:
             return jsonify({"message": "Username already exists!"}), 409
         elif user['email'] == email:
             return jsonify({"message": "Email already exists!"}), 409
