@@ -1,5 +1,6 @@
 .ticket-form,
-.task-form {
+.task-form,
+.modify-account-form {
     display: flex;
     flex-direction: column;
 }

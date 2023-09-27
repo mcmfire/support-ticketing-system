@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react';
 import TaskStream from './taskStream';
 import UserStream from './userStream';
 import Dialog from '../../components/dialog/dialog';
+import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import { openSocket, closeSocket, disconnectSocket, emitSocket } from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
 import logoutUser from '../../services/auth/logoutUser';
 import deleteUser from '../../services/settings/deleteUser';
+import updateUser from '../../services/settings/updateUser';
 import authReset from '../../utils/authReset';
 
 const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
     const [toggleTicket, setToggleTicket] = useState(false);
     const [toggleFinishedTasks, setToggleFinishedTasks] = useState(false);
+    const [toggleModifyUser, setToggleModifyUser] = useState(false);
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState([]);
@@ -82,6 +85,28 @@ const Panel = () => {
         });
     };
 
+    const modifyUser = (event) => {
+        event.preventDefault();
+        const fnameInput = event.target.elements['fname-modify-entry'].value;
+        const lnameInput = event.target.elements['lname-modify-entry'].value;
+        const emailInput = event.target.elements['email-modify-entry'].value;
+
+        updateUser({
+            "first_name": fnameInput,
+            "last_name": lnameInput,
+            "email": emailInput,
+        })
+        .then(navigate => {
+            if (navigate) {
+                authReset();
+            }
+            else {
+                setToggleModifyUser(false);
+            }
+            setToAuth(navigate);
+        });
+    };
+
     return (
         <>
         {toAuth && (
@@ -95,13 +120,29 @@ const Panel = () => {
                     onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
             <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
             <Button className='delete-account-button' type='button' text='Delete Account' onClick={removeUser}/>
+            <Button className='modify-account-button' type='button' text='Modify Account' 
+                    onClick={() => setToggleModifyUser(!toggleModifyUser)}/>
             </>
         )}
-        {!toAuth && (
+        {(!toAuth && !toggleModifyUser) && (
             <>
             <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
                         toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth} />
             <UserStream onlineUsers={onlineUsers}/>
+            </>
+        )}
+        {(!toAuth && toggleModifyUser) && (
+            <>
+            <form className='modify-account-form' onSubmit={modifyUser}>
+                <Input className='fname-entry' name='fname-modify-entry' 
+                        type='text' placeholder='First Name' required/>
+                <Input className='lname-entry' name='lname-modify-entry' 
+                        type='text' placeholder='Last Name' required/>
+                <Input className='email-entry' name='email-modify-entry' 
+                        type='email' placeholder='Email'/>
+                <Button className='confirm-button' type='submit' text='Confirm'/>
+                <Button className='back-button' type='button' text='Back' onClick={() => setToggleModifyUser(false)}/>
+            </form>
             </>
         )}
         </>

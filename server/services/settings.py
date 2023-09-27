@@ -10,16 +10,16 @@ class SettingsService:
     @staticmethod
     def modify_account(**args):
         current_user = session.get('user')
-
+        
         if not current_user:
             Response().undefined
 
-        data = {}
-        query_filter = {"_id": ObjectId(args['_id'])}
+        data = {"$set": {}}
+        query_filter = {"_id": ObjectId(current_user['_id'])}
 
         for arg in args:
             if arg != '_id':
-                data['$set'] = {arg: args[arg]}
+                data['$set'].update({arg: args[arg]})
         
         update_user_data('auth', 'profiles', query_filter, data)
 
