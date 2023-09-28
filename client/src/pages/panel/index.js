@@ -7,6 +7,7 @@ import Button from '../../components/button/button';
 import { openSocket, closeSocket, disconnectSocket, emitSocket } from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
+import authenticateUser from '../../services/auth/authenticateUser';
 import logoutUser from '../../services/auth/logoutUser';
 import deleteUser from '../../services/settings/deleteUser';
 import updateUser from '../../services/settings/updateUser';
@@ -90,20 +91,29 @@ const Panel = () => {
         const fnameInput = event.target.elements['fname-modify-entry'].value;
         const lnameInput = event.target.elements['lname-modify-entry'].value;
         const emailInput = event.target.elements['email-modify-entry'].value;
+        const passwordInput = event.target.elements['password-modify-entry'].value;
 
-        updateUser({
-            "first_name": fnameInput,
-            "last_name": lnameInput,
-            "email": emailInput,
-        })
-        .then(navigate => {
-            if (navigate) {
-                authReset();
+        authenticateUser(passwordInput)
+        .then(authenticated => {
+            if (authenticated) {
+                updateUser({
+                    "first_name": fnameInput,
+                    "last_name": lnameInput,
+                    "email": emailInput,
+                })
+                .then(navigate => {
+                    if (navigate) {
+                        authReset();
+                    }
+                    else {
+                        setToggleModifyUser(false);
+                    }
+                    setToAuth(navigate);
+                });
             }
             else {
-                setToggleModifyUser(false);
+                console.log('Invalid password.');
             }
-            setToAuth(navigate);
         });
     };
 
@@ -140,6 +150,9 @@ const Panel = () => {
                         type='text' placeholder='Last Name' required/>
                 <Input className='email-entry' name='email-modify-entry' 
                         type='email' placeholder='Email'/>
+                <label htmlFor='password-modify-entry'>Confirm Identity</label>
+                <Input className='password-entry' name='password-modify-entry'
+                        type='password' placeholder='Password' required/>
                 <Button className='confirm-button' type='submit' text='Confirm'/>
                 <Button className='back-button' type='button' text='Back' onClick={() => setToggleModifyUser(false)}/>
             </form>
