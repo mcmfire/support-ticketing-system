@@ -66,50 +66,52 @@ const Form = () => {
     };
 
     return (
-        <div className='form-container'>
-            {toPanel && UserRedirect('/panel')}
-            {!toggleNext && !toggleRegister && (
-                <>
-                <h1>Let's be a wingman today!</h1>
-                <form className='identity-form' onSubmit={submitIdentity}>
-                    <Input className='identity-entry' name='identity-entry' type='text' placeholder='Username or Email' required/>
-                    <Button className='confirm-button' type='submit' text='Confirm'/>
-                    <Button className='signup-button' type='button' text='Signup' onClick={() => setToggleRegister(true)}/>
-                </form>
-                </>
-            )}
-            {toggleNext && !toggleRegister && (
-                <>
-                <h1>Welcome back, {username}!</h1>
-                <form className='password-form' onSubmit={submitPassword}>
-                    <Input className='password-entry' name='password-entry' type='password' placeholder='Password' required/>
-                    <Button className='login-button' type='submit' text='Login'/>
-                    <Button className='back-button' type='button' text='Back' onClick={goBack}/>
-                </form>
-                </>
-                
-            )}
-            {toggleRegister && (
-                <>
-                <h1>Create an account</h1>
-                <form className='registration-form' onSubmit={submitRegistration}>
-                    <Input className='username-entry' name='username-register-entry' 
-                            type='text' placeholder='Username' required/>
-                    <Input className='password-entry' name='password-register-entry' 
-                            type='password' placeholder='Password' required/>
-                    <Input className='cpassword-entry' name='cpassword-register-entry'
-                            type='password' placeholder='Confirm Password' required/>
-                    <Input className='fname-entry' name='fname-register-entry' 
-                            type='text' placeholder='First Name' required/>
-                    <Input className='lname-entry' name='lname-register-entry' 
-                            type='text' placeholder='Last Name' required/>
-                    <Input className='email-entry' name='email-register-entry' 
-                            type='email' placeholder='Email'/>
-                    <Button className='register-button' type='submit' text='Register'/>
-                    <Button className='back-button' type='button' text='Back' onClick={goBack}/>
-                </form>
-                </>
-            )}
+        <div className='auth-page'>
+            <div className='form-container'>
+                {toPanel && UserRedirect('/panel')}
+                {!toggleNext && !toggleRegister && (
+                    <>
+                    <h1>Let's be a wingman today!</h1>
+                    <form className='identity-form' onSubmit={submitIdentity}>
+                        <Input className='identity-entry' name='identity-entry' type='text' placeholder='Username or Email' required/>
+                        <Button className='confirm-button' type='submit' text='Confirm'/>
+                        <Button className='signup-button' type='button' text='Signup' onClick={() => setToggleRegister(true)}/>
+                    </form>
+                    </>
+                )}
+                {toggleNext && !toggleRegister && (
+                    <>
+                    <h1>Welcome back, {username}!</h1>
+                    <form className='password-form' onSubmit={submitPassword}>
+                        <Input className='password-entry' name='password-entry' type='password' placeholder='Password' required/>
+                        <Button className='login-button' type='submit' text='Login'/>
+                        <Button className='back-button' type='button' text='Back' onClick={goBack}/>
+                    </form>
+                    </>
+                    
+                )}
+                {toggleRegister && (
+                    <>
+                    <h1>Create an account</h1>
+                    <form className='registration-form' onSubmit={submitRegistration}>
+                        <Input className='username-entry' name='username-register-entry' 
+                                type='text' placeholder='Username' required/>
+                        <Input className='password-entry' name='password-register-entry' 
+                                type='password' placeholder='Password' required/>
+                        <Input className='cpassword-entry' name='cpassword-register-entry'
+                                type='password' placeholder='Confirm Password' required/>
+                        <Input className='fname-entry' name='fname-register-entry' 
+                                type='text' placeholder='First Name' required/>
+                        <Input className='lname-entry' name='lname-register-entry' 
+                                type='text' placeholder='Last Name' required/>
+                        <Input className='email-entry' name='email-register-entry' 
+                                type='email' placeholder='Email'/>
+                        <Button className='register-button' type='submit' text='Register'/>
+                        <Button className='back-button' type='button' text='Back' onClick={goBack}/>
+                    </form>
+                    </>
+                )}
+            </div>
         </div>
     );
 };

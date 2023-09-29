@@ -6,4 +6,5 @@ input.fname-entry,
 input.lname-entry,
 input.email-entry {
     border-color: #1e1e1e;
+    padding: 1vh 0.5vw;
 }
