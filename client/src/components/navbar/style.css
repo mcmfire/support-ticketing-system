@@ -1,15 +1,7 @@
 .navbar-container {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row;
     height: 5vh;
     padding: 0.75rem;
     background-color: #1e1e1e;
-}
-
-.navbar-container .get-started-button {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 10px;
-    background-color: #00cf2e;
-    font-weight: bold;
-}
+}   

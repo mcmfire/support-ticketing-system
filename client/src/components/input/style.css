@@ -4,7 +4,10 @@ input.password-entry,
 input.cpassword-entry,
 input.fname-entry,
 input.lname-entry,
-input.email-entry {
+input.email-entry,
+input.title-entry,
+input.description-entry,
+input.contact-entry {
     border-color: #1e1e1e;
     padding: 1vh 0.5vw;
 }

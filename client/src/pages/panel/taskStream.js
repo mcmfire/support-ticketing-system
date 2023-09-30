@@ -206,7 +206,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
             <form className='ticket-form' onSubmit={createTicket}>
                 <Input className='title-entry' name='title-entry' type='text' placeholder='Title' required/>
                 <Input className='description-entry' name='description-entry' type='text' placeholder='Description'/>
-                <Input className='contanct-entry' name='contact-entry' type='text' placeholder='Contact'/>
+                <Input className='contact-entry' name='contact-entry' type='text' placeholder='Contact'/>
                 <Button className='submit-ticket-button' type='submit' text='Create'/>
                 <Button className='back-button' type='button' text='Back' onClick={() => setToggleTicket(false)}/>
             </form>

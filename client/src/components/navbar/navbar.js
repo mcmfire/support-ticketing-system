@@ -1,11 +1,10 @@
 import React from 'react';
-import Button from '../button/button';
 import './style.css';
 
-const Navbar = ({toggleForm, setToggleForm}) => {
+const Navbar = ({navigation}) => {
     return (
         <div className='navbar-container'>
-            <Button className='get-started-button' type='button' text='Get Started' onClick={() => setToggleForm(!toggleForm)}/>
+            {navigation}
         </div>
     );
 };
