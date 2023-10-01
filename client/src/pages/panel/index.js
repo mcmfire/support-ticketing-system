@@ -3,22 +3,17 @@ import TaskStream from './taskStream';
 import UserStream from './userStream';
 import Navbar from '../../components/navbar/navbar';
 import Dialog from '../../components/dialog/dialog';
-import Input from '../../components/input/input';
 import Button from '../../components/button/button';
 import { openSocket, closeSocket, disconnectSocket, emitSocket } from '../../utils/setSocket';
 import UserRedirect from '../../utils/userRedirect';
 import openPanel from '../../services/panel/openPanel';
-import authenticateUser from '../../services/auth/authenticateUser';
-import logoutUser from '../../services/auth/logoutUser';
-import deleteUser from '../../services/settings/deleteUser';
-import updateUser from '../../services/settings/updateUser';
 import authReset from '../../utils/authReset';
 
 const Panel = () => {
     const [toAuth, setToAuth] = useState(false);
+    const [toSettings, setToSettings] = useState(false);
     const [toggleTicket, setToggleTicket] = useState(false);
     const [toggleFinishedTasks, setToggleFinishedTasks] = useState(false);
-    const [toggleModifyUser, setToggleModifyUser] = useState(false);
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState([]);
@@ -69,95 +64,27 @@ const Panel = () => {
 
     }, []);
 
-    const endSession = () => {
-        logoutUser()
-        .then((navigate) => {
-            if (navigate) {
-                authReset();
-                UserRedirect('/auth');
-            }
-        });
-    };
-
-    const removeUser = () => {
-        deleteUser()
-        .then(() => {
-            authReset();
-            UserRedirect('/auth');
-        });
-    };
-
-    const modifyUser = (event) => {
-        event.preventDefault();
-        const fnameInput = event.target.elements['fname-modify-entry'].value;
-        const lnameInput = event.target.elements['lname-modify-entry'].value;
-        const emailInput = event.target.elements['email-modify-entry'].value;
-        const passwordInput = event.target.elements['password-modify-entry'].value;
-
-        authenticateUser(passwordInput)
-        .then(authenticated => {
-            if (authenticated) {
-                updateUser({
-                    "first_name": fnameInput,
-                    "last_name": lnameInput,
-                    "email": emailInput,
-                })
-                .then(navigate => {
-                    if (navigate) {
-                        authReset();
-                    }
-                    else {
-                        setToggleModifyUser(false);
-                    }
-                    setToAuth(navigate);
-                });
-            }
-            else {
-                console.log('Invalid password.');
-            }
-        });
-    };
-
     return (
         <>
         {toAuth && (
             <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
         )}
+        {(!toAuth && toSettings) && UserRedirect('/settings')}
         {!toAuth && (
             <Navbar navigation={
                 <>
                 <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
                 <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
                         onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
-                <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
-                <Button className='delete-account-button' type='button' text='Delete Account' onClick={removeUser}/>
-                <Button className='modify-account-button' type='button' text='Modify Account' 
-                        onClick={() => setToggleModifyUser(!toggleModifyUser)}/>
+                <Button className='settings-button' type='button' text='Settings' onClick={() => setToSettings(!toSettings)}/>
                 </>
             }/>
         )}
-        {(!toAuth && !toggleModifyUser) && (
+        {!toAuth && (
             <>
             <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
-                        toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth} />
+                        toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
             <UserStream onlineUsers={onlineUsers}/>
-            </>
-        )}
-        {(!toAuth && toggleModifyUser) && (
-            <>
-            <form className='modify-account-form' onSubmit={modifyUser}>
-                <Input className='fname-entry' name='fname-modify-entry' 
-                        type='text' placeholder='First Name' required/>
-                <Input className='lname-entry' name='lname-modify-entry' 
-                        type='text' placeholder='Last Name' required/>
-                <Input className='email-entry' name='email-modify-entry' 
-                        type='email' placeholder='Email'/>
-                <label htmlFor='password-modify-entry'>Confirm Identity</label>
-                <Input className='password-entry' name='password-modify-entry'
-                        type='password' placeholder='Password' required/>
-                <Button className='confirm-button' type='submit' text='Confirm'/>
-                <Button className='back-button' type='button' text='Back' onClick={() => setToggleModifyUser(false)}/>
-            </form>
             </>
         )}
         </>

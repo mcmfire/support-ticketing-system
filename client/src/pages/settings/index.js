@@ -1,0 +1,110 @@
+import React, { useState } from "react";
+import Navbar from "../../components/navbar/navbar";
+import Dialog from '../../components/dialog/dialog';
+import Button from "../../components/button/button";
+import Input from "../../components/input/input";
+import authenticateUser from "../../services/auth/authenticateUser";
+import updateUser from "../../services/settings/updateUser";
+import logoutUser from "../../services/auth/logoutUser";
+import deleteUser from "../../services/settings/deleteUser";
+import authReset from "../../utils/authReset";
+import UserRedirect from "../../utils/userRedirect";
+import './style.css';
+
+const Settings = () => {
+    const [toAuth, setToAuth] = useState(false);
+    const [toggleModifyUser, setToggleModifyUser] = useState(false);
+
+    const modifyUser = (event) => {
+        event.preventDefault();
+        const fnameInput = event.target.elements['fname-modify-entry'].value;
+        const lnameInput = event.target.elements['lname-modify-entry'].value;
+        const emailInput = event.target.elements['email-modify-entry'].value;
+        const passwordInput = event.target.elements['password-modify-entry'].value;
+
+        authenticateUser(passwordInput)
+        .then(authenticated => {
+            if (authenticated) {
+                updateUser({
+                    "first_name": fnameInput,
+                    "last_name": lnameInput,
+                    "email": emailInput,
+                })
+                .then(navigate => {
+                    if (navigate) {
+                        authReset();
+                    }
+                    else {
+                        setToggleModifyUser(false);
+                    }
+                    setToAuth(navigate);
+                });
+            }
+            else {
+                console.log('Invalid password.');
+            }
+        });
+    };
+
+    const endSession = () => {
+        logoutUser()
+        .then((navigate) => {
+            if (navigate) {
+                authReset();
+                UserRedirect('/auth');
+            }
+        });
+    };
+
+    const removeUser = () => {
+        deleteUser()
+        .then(() => {
+            authReset();
+            UserRedirect('/auth');
+        });
+    };
+
+    return (
+        <>
+        {toAuth && (
+            <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
+        )}
+        {!toAuth && (
+            <Navbar navigation={
+                <>
+                <Button className='panel-button' type='button' text='Panel' onClick={() => UserRedirect('/panel')}/>
+                <Button className='logout-button' type='button' text='Logout' onClick={endSession}/>
+                </>
+            }/>
+        )}
+        <div className='settings-page'>
+            {!toAuth && (
+                <div className='settings-options'>
+                    <Button className='modify-account-button' type='button' text='Modify Account' 
+                            onClick={() => setToggleModifyUser(!toggleModifyUser)}/>
+                    <Button className='delete-account-button' type='button' text='Delete Account' onClick={removeUser}/>
+                </div>
+            )}
+            {(!toAuth && toggleModifyUser) && (
+                <div className='settings-content'>
+                    <form className='modify-account-form' onSubmit={modifyUser}>
+                        <Input className='fname-entry' name='fname-modify-entry' 
+                                type='text' placeholder='First Name' required/>
+                        <Input className='lname-entry' name='lname-modify-entry' 
+                                type='text' placeholder='Last Name' required/>
+                        <Input className='email-entry' name='email-modify-entry' 
+                                type='email' placeholder='Email'/>
+                        <label htmlFor='password-modify-entry'>Confirm Identity</label>
+                        <Input className='password-entry' name='password-modify-entry'
+                                type='password' placeholder='Password' required/>
+                        <Button className='confirm-button' type='submit' text='Confirm'/>
+                        <Button className='back-button' type='button' text='Back' onClick={() => setToggleModifyUser(false)}/>
+                    </form>
+                </div>
+            )}
+        </div>
+        </>
+    );
+};
+
+export default Settings;

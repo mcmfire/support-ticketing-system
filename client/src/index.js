@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Auth from './pages/auth/index';
 import Panel from './pages/panel/index';
+import Settings from './pages/settings';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -10,6 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/' element={<Navigate to='/auth'/>} exact/>
       <Route path='/auth' element={<Auth/>}/>
       <Route path='/panel' element={<Panel/>}/>
+      <Route path='/settings' element={<Settings/>}/>
     </Routes>
   </BrowserRouter>
 );

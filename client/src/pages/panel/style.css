@@ -16,17 +16,6 @@
 .create-ticket-button,
 .finished-tasks-button,
 .logout-button,
-.delete-account-button,
-.modify-account-button {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 10px;
-    font-weight: 500;
-}
-
-.create-ticket-button,
-.finished-tasks-button,
-.logout-button,
 .delete-account-button {
     margin-right: 2vw;
 }
@@ -35,13 +24,15 @@
     background-color: #00cf2e;
 }
 
+.create-ticket-button,
+.finished-tasks-button,
+.settings-button, 
 .modify-button,
 .delete-button,
 .respond-button,
 .upvote-button,
 .finish-button,
 .submit-ticket-button,
-.confirm-button,
 .back-button {
     padding: 0.5rem;
     border: none;
@@ -61,19 +52,16 @@
     box-sizing: border-box;
 }
 
-.ticket-form,
-.modify-account-form {
+.ticket-form {
     margin: 5vh 2.5vw;
 }
 
-.ticket-form input,
-.modify-account-form input {
+.ticket-form input {
     border-radius: 0.25rem;
     margin: 1.5vh 0vw;
 }
 
-.ticket-form button,
-.modify-account-form button {
+.ticket-form button {
     margin-bottom: 1.5vh;
 }
 

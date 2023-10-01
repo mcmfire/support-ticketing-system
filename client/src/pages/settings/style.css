@@ -1,0 +1,53 @@
+.settings-page {
+    display: flex;
+    flex: 1;
+}
+
+.settings-options {
+    display: flex;
+    flex: 0 0 30%;
+    flex-direction: column;
+}
+
+.settings-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin: 5vh 5vw;
+}
+
+.panel-button,
+.logout-button,
+.confirm-button {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.delete-account-button,
+.modify-account-button {
+    padding: 0.5rem;
+    border: none;
+    font-weight: 500;
+    color: #1e1e1e;
+    background: #ffffff;
+    width: 30vw;
+}
+
+.delete-account-button {
+    color: red;
+}
+
+.modify-account-form {
+    margin: 5vh 2.5vw;
+}
+
+.modify-account-form button {
+    margin-bottom: 1.5vh;
+}
+
+.modify-account-form input {
+    border-radius: 0.25rem;
+    margin: 1.5vh 0vw;
+}
