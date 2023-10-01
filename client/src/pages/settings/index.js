@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/navbar";
 import Dialog from '../../components/dialog/dialog';
 import Button from "../../components/button/button";
 import Input from "../../components/input/input";
 import authenticateUser from "../../services/auth/authenticateUser";
-import updateUser from "../../services/settings/updateUser";
 import logoutUser from "../../services/auth/logoutUser";
+import openSettings from "../../services/settings/openSettings";
+import updateUser from "../../services/settings/updateUser";
 import deleteUser from "../../services/settings/deleteUser";
 import authReset from "../../utils/authReset";
 import UserRedirect from "../../utils/userRedirect";
@@ -14,6 +15,14 @@ import './style.css';
 const Settings = () => {
     const [toAuth, setToAuth] = useState(false);
     const [toggleModifyUser, setToggleModifyUser] = useState(false);
+    const [accountInfo, setAccountInfo] = useState({});
+
+    useEffect(() => {
+        openSettings(setAccountInfo)
+        .then(navigate => {
+            setToAuth(navigate);
+        });
+    }, []);
 
     const modifyUser = (event) => {
         event.preventDefault();
@@ -88,12 +97,15 @@ const Settings = () => {
             {(!toAuth && toggleModifyUser) && (
                 <div className='settings-content'>
                     <form className='modify-account-form' onSubmit={modifyUser}>
+                        <label htmlFor='fname-modify-entry'>First Name</label>
                         <Input className='fname-entry' name='fname-modify-entry' 
-                                type='text' placeholder='First Name' required/>
+                                type='text' placeholder='First Name' value={accountInfo['first_name']} required/>
+                        <label htmlFor='lname-modify-entry'>Last Name</label>
                         <Input className='lname-entry' name='lname-modify-entry' 
-                                type='text' placeholder='Last Name' required/>
+                                type='text' placeholder='Last Name' value={accountInfo['last_name']} required/>
+                        <label htmlFor='email-modify-entry'>Email</label>
                         <Input className='email-entry' name='email-modify-entry' 
-                                type='email' placeholder='Email'/>
+                                type='email' placeholder='Email' value={accountInfo['email']}/>
                         <label htmlFor='password-modify-entry'>Confirm Identity</label>
                         <Input className='password-entry' name='password-modify-entry'
                                 type='password' placeholder='Password' required/>

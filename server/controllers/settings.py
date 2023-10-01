@@ -6,6 +6,11 @@ class SettingsController(SettingsService):
     def __init__(self):
         super().__init__()
     
+    def open_settings(self):
+        response = self.load_settings()
+
+        return response
+    
     def update_account(self):
         data = request.get_json()
         user_input = filter_input(**data)

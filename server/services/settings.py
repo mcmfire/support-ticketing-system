@@ -1,12 +1,18 @@
 from flask import jsonify, session
 from services.auth import AuthService
-from utils.extensions import cache
-from utils.db import update_user_data, delete_user_data
+from utils.db import get_user_data, update_user_data, delete_user_data
 from utils.variables import Response
-from utils.cleanup import user_data_cleanup
 from bson import ObjectId
 
 class SettingsService:
+    @staticmethod
+    def load_settings():
+        current_user = session.get('user')
+
+        user = get_user_data('auth', 'profiles', {"username": current_user['username']}, {"_id": 0})
+
+        return jsonify({"account": user})
+    
     @staticmethod
     def modify_account(**args):
         current_user = session.get('user')
