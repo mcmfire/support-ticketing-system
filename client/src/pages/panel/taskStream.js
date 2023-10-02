@@ -132,7 +132,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
     };
 
     return (
-        <>
+        <div className='task-list'>
         {!toggleTicket && (
             <>
             {Object.keys(tasksByDepartment).map((department) => (
@@ -211,7 +211,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                 <Button className='back-button' type='button' text='Back' onClick={() => setToggleTicket(false)}/>
             </form>
         )}
-        </>
+        </div>
     );
 };
 

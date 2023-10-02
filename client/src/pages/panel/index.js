@@ -81,11 +81,11 @@ const Panel = () => {
             }/>
         )}
         {!toAuth && (
-            <>
-            <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
-                        toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
-            <UserStream onlineUsers={onlineUsers}/>
-            </>
+            <div className='panel-page'>
+                <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
+                            toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
+                <UserStream onlineUsers={onlineUsers}/>
+            </div>
         )}
         </>
     );

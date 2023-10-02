@@ -3,7 +3,6 @@ from flask_jwt_extended import verify_jwt_in_request, jwt_required, get_jwt
 from models.user import User
 from utils.variables import Response
 from utils.extensions import pymongo, cache
-from utils.cleanup import user_data_cleanup
 from utils.token import generate_token, revoke_token
 from utils.db import get_user_data
 from utils.firebase import create_avatar
@@ -138,6 +137,7 @@ class AuthService:
             revoked = revoked_refresh
 
         cache_key = f'user_cache={revoked["sub"]}'
-        user_data_cleanup(cache_key)
+        session.clear()
+        cache.delete(cache_key)
 
         return jsonify({"message": "Logout successful."}), 200

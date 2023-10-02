@@ -1,6 +1,7 @@
 from flask import jsonify, session
 from services.auth import AuthService
 from utils.db import get_user_data, update_user_data, delete_user_data
+from utils.extensions import cache
 from utils.variables import Response
 from bson import ObjectId
 
@@ -44,6 +45,9 @@ class SettingsService:
 
         if tasks_deleted and creds_deleted and profile_deleted:
             AuthService().revoke_user(refresh_token)
+            cache_key = f'user_cache={current_user["username"]}'
+            session.clear()
+            cache.delete(cache_key)
             return jsonify({"message": "Account deleted."}), 200
         
         return Response().undefined
