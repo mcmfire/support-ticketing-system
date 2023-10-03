@@ -24,7 +24,13 @@ const Form = () => {
         event.preventDefault();
         const passwordInput = event.target.elements['password-entry'].value;
 
-        authenticateUser(passwordInput).then(navigate => setToPanel(navigate));
+        authenticateUser(passwordInput).then((navigate) => {
+            if (!navigate) {
+                alert('Invalid password.');
+            }
+
+            setToPanel(navigate);
+        });
     };
 
     const submitRegistration = (event) => {
@@ -37,7 +43,7 @@ const Form = () => {
         const emailInput = event.target.elements['email-register-entry'].value;
         
         if (passwordInput.length < 8 || passwordInput.length > 16) {
-            console.log('Password must be between 8 and 16 characters long.');
+            alert('Password must be between 8 and 16 characters long.');
             return;
         }
 
@@ -51,11 +57,11 @@ const Form = () => {
                 }
             )
             .then(navigate => {
-                navigate ? setToPanel(true) : console.log('User not registered');
+                navigate ? setToPanel(true) : alert('User not registered.');
             });
         }
         else {
-            console.log('Password does not match.');
+            alert('Password does not match.');
         }
     };
 
