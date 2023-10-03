@@ -10,6 +10,7 @@ import updateUser from "../../services/settings/updateUser";
 import deleteUser from "../../services/settings/deleteUser";
 import authReset from "../../utils/authReset";
 import UserRedirect from "../../utils/userRedirect";
+import { deleteImage } from '../../utils/getImage';
 import './style.css';
 
 const Settings = () => {
@@ -65,11 +66,16 @@ const Settings = () => {
         });
     };
 
-    const removeUser = () => {
+    const removeUser = (imageId) => {
         deleteUser()
         .then(() => {
-            authReset();
-            UserRedirect('/auth');
+            deleteImage(imageId)
+            .then((navigate) => {
+                if (navigate) {
+                    authReset();
+                    UserRedirect('/auth');
+                }
+            });
         });
     };
 
@@ -91,7 +97,8 @@ const Settings = () => {
                 <div className='settings-options'>
                     <Button className='modify-account-button' type='button' text='Modify Account' 
                             onClick={() => setToggleModifyUser(!toggleModifyUser)}/>
-                    <Button className='delete-account-button' type='button' text='Delete Account' onClick={removeUser}/>
+                    <Button className='delete-account-button' type='button' text='Delete Account' 
+                            onClick={() => removeUser(accountInfo['_id'])}/>
                 </div>
             )}
             {(!toAuth && toggleModifyUser) && (

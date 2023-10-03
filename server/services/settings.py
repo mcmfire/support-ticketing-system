@@ -10,8 +10,9 @@ class SettingsService:
     def load_settings():
         current_user = session.get('user')
 
-        user = get_user_data('auth', 'profiles', {"username": current_user['username']}, {"_id": 0})
-
+        user = get_user_data('auth', 'profiles', {"username": current_user['username']}, {})
+        user['_id'] = str(user['_id'])
+        
         return jsonify({"account": user})
     
     @staticmethod

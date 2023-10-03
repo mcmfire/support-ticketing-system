@@ -18,4 +18,22 @@ const getImage = (filename) => {
     });
 };
 
-export default getImage;
+const deleteImage = (filename) => {
+    return new Promise((resolve) => {
+        fetch(`/delete-avatar/${filename}`, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+            resolve(true);
+        })
+        .catch(() => {
+            resolve(false);
+        });
+    });
+};
+
+export { getImage, deleteImage };
