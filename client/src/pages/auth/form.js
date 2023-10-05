@@ -72,7 +72,7 @@ const Form = () => {
     };
 
     return (
-        <div className='auth-page'>
+        <div className='auth-view'>
             <div className='form-container'>
                 {toPanel && UserRedirect('/panel')}
                 {!toggleNext && !toggleRegister && (

@@ -4,9 +4,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Auth from './pages/auth/index';
 import Panel from './pages/panel/index';
 import Settings from './pages/settings';
+import './style.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
+  <div className='app'>
+    <BrowserRouter>
     <Routes>
       <Route path='/' element={<Navigate to='/auth'/>} exact/>
       <Route path='/auth' element={<Auth/>}/>
@@ -14,4 +16,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path='/settings' element={<Settings/>}/>
     </Routes>
   </BrowserRouter>
+  </div>
 );

@@ -1,6 +1,7 @@
 .settings-page {
     display: flex;
     flex: 1;
+    margin-top: 5%;
 }
 
 .settings-options {

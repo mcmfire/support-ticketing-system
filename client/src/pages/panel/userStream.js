@@ -3,6 +3,7 @@ import { getImage } from "../../utils/getImage";
 
 const UserStream = ({onlineUsers}) => {
     const [avatarURLs, setAvatarURLs] = useState([]); 
+    const currentUser = sessionStorage.getItem('username');
 
     useEffect(() => {
         if (!onlineUsers) {return;}
@@ -25,9 +26,10 @@ const UserStream = ({onlineUsers}) => {
     return (
         <div className="user-container">
         {onlineUsers.map((onlineUser, index) => (
-            <div key={`user-${index + 1}`}>
+            <div key={`user-${index + 1}`} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <img className={`user-avatar`} src={avatarURLs[index]} alt={onlineUser['username']} 
                     style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '100px', width: '100px'}}></img>
+                <h1>{currentUser == onlineUser['username'] ? 'You' : onlineUser['name']}</h1>
             </div>
         ))}
         </div>

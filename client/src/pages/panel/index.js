@@ -65,29 +65,29 @@ const Panel = () => {
     }, []);
 
     return (
-        <>
-        {toAuth && (
-            <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
-        )}
-        {(!toAuth && toSettings) && UserRedirect('/settings')}
-        {!toAuth && (
-            <Navbar navigation={
-                <>
-                <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
-                <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
-                        onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
-                <Button className='settings-button' type='button' text='Settings' onClick={() => setToSettings(!toSettings)}/>
-                </>
-            }/>
-        )}
-        {!toAuth && (
-            <div className='panel-page'>
-                <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
-                            toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
-                <UserStream onlineUsers={onlineUsers}/>
-            </div>
-        )}
-        </>
+        <div className='panel-page'>
+            {toAuth && (
+                <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
+            )}
+            {(!toAuth && toSettings) && UserRedirect('/settings')}
+            {!toAuth && (
+                <Navbar navigation={
+                    <>
+                    <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
+                    <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
+                            onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
+                    <Button className='settings-button' type='button' text='Settings' onClick={() => setToSettings(!toSettings)}/>
+                    </>
+                }/>
+            )}
+            {!toAuth && (
+                <div className='panel-view'>
+                    <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
+                                toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
+                    <UserStream onlineUsers={onlineUsers}/>
+                </div>
+            )}
+        </div>
     );
 };
 

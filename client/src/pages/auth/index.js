@@ -13,12 +13,14 @@ const Auth = () => {
                 <Button className='get-started-button' type='button' text='Get Started' onClick={() => setToggleForm(!toggleForm)}/>
             </div>
         }/>
-        {!toggleForm && (
-            <h1>Leave no request unresponded.</h1>
-        )}
-        {toggleForm && (
-            <Form/>
-        )}
+        <div className='auth-page'>
+            {!toggleForm && (
+                <h1>Leave no request unresponded.</h1>
+            )}
+            {toggleForm && (
+                <Form/>
+            )}
+        </div>
         </>
     );
 };

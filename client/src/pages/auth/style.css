@@ -7,6 +7,10 @@
 }
 
 .auth-page {
+    margin: 5% 1%;
+}
+
+.auth-view {
     display: flex;
     justify-content: flex-end;
 }
@@ -48,7 +52,7 @@
 
 .auth-navigation {
     display: flex;
-    flex: 0 0 100%;
+    width: 98%;
     flex-direction: row;
     justify-content: flex-end;
 }
