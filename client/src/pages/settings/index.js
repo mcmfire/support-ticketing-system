@@ -67,16 +67,20 @@ const Settings = () => {
     };
 
     const removeUser = (imageId) => {
-        deleteUser()
-        .then(() => {
-            deleteImage(imageId)
-            .then((navigate) => {
-                if (navigate) {
-                    authReset();
-                    UserRedirect('/auth');
-                }
+        const confirm = window.confirm('Delete account?');
+
+        if (confirm === true) {
+            deleteUser()
+            .then(() => {
+                deleteImage(imageId)
+                .then((navigate) => {
+                    if (navigate) {
+                        authReset();
+                        UserRedirect('/auth');
+                    }
+                });
             });
-        });
+        }
     };
 
     return (

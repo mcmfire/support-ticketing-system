@@ -171,7 +171,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                             </>
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && 
-                            task['username'] == currentUser && !toggleModifyTask) && (
+                            task['username'] == currentUser && toggleModifyTask != task['_id']) && (
                             <>
                             <Button className='modify-button' type='button' text='Modify' 
                                     onClick={() => setToggleModifyTask(task['_id'])}/>
