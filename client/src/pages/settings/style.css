@@ -19,13 +19,15 @@
 
 .panel-button,
 .logout-button,
-.confirm-button {
+.confirm-button,
+.submit-button {
     padding: 0.5rem;
     border: none;
     border-radius: 10px;
     font-weight: 500;
 }
 
+.change-avatar-button,
 .delete-account-button,
 .modify-account-button {
     padding: 0.5rem;
@@ -38,6 +40,11 @@
 
 .delete-account-button {
     color: red;
+}
+
+.upload-avatar-form {
+    display: flex;
+    flex-direction: column;
 }
 
 .modify-account-form {

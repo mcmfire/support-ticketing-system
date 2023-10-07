@@ -10,11 +10,12 @@ import updateUser from "../../services/settings/updateUser";
 import deleteUser from "../../services/settings/deleteUser";
 import authReset from "../../utils/authReset";
 import UserRedirect from "../../utils/userRedirect";
-import { deleteImage } from '../../utils/getImage';
+import { getImage, deleteImage } from '../../utils/getImage';
 import './style.css';
 
 const Settings = () => {
     const [toAuth, setToAuth] = useState(false);
+    const [toggleUploadAvatar, setToggleUploadAvatar] = useState(false);
     const [toggleModifyUser, setToggleModifyUser] = useState(false);
     const [accountInfo, setAccountInfo] = useState({});
 
@@ -99,32 +100,43 @@ const Settings = () => {
         <div className='settings-page'>
             {!toAuth && (
                 <div className='settings-options'>
+                    <Button className='change-avatar-button' type='button' text='Change Avatar'
+                            onClick={() => setToggleUploadAvatar(!toggleUploadAvatar)}/>
                     <Button className='modify-account-button' type='button' text='Modify Account' 
                             onClick={() => setToggleModifyUser(!toggleModifyUser)}/>
                     <Button className='delete-account-button' type='button' text='Delete Account' 
                             onClick={() => removeUser(accountInfo['_id'])}/>
                 </div>
             )}
-            {(!toAuth && toggleModifyUser) && (
-                <div className='settings-content'>
+            <div className='settings-content'>
+                {(!toAuth && toggleUploadAvatar) && (
+                    <form className='upload-avatar-form' encType='multipart/form-data'>
+                        <label htmlFor='avatar-upload'>Choose avatar:</label>
+                        <Input className='avatar-upload' name='avatar-upload' type='file'/>
+                        <Button className='submit-button' type='submit' text='Upload Avatar'/>
+                    </form>
+                )}
+                {(!toAuth && toggleModifyUser) && (
                     <form className='modify-account-form' onSubmit={modifyUser}>
                         <label htmlFor='fname-modify-entry'>First Name</label>
                         <Input className='fname-entry' name='fname-modify-entry' 
-                                type='text' placeholder='First Name' value={accountInfo['first_name']} required/>
+                                type='text' placeholder={accountInfo['first_name'] ? accountInfo['first_name'] : 'First Name'}
+                                required/>
                         <label htmlFor='lname-modify-entry'>Last Name</label>
                         <Input className='lname-entry' name='lname-modify-entry' 
-                                type='text' placeholder='Last Name' value={accountInfo['last_name']} required/>
+                                type='text' placeholder={accountInfo['last_name'] ? accountInfo['last_name'] : 'Last Name'}
+                                required/>
                         <label htmlFor='email-modify-entry'>Email</label>
                         <Input className='email-entry' name='email-modify-entry' 
-                                type='email' placeholder='Email' value={accountInfo['email']}/>
+                                type='email' placeholder={accountInfo['email'] ? accountInfo['email'] : 'Email'}/>
                         <label htmlFor='password-modify-entry'>Confirm Identity</label>
                         <Input className='password-entry' name='password-modify-entry'
                                 type='password' placeholder='Password' required/>
                         <Button className='confirm-button' type='submit' text='Confirm'/>
                         <Button className='back-button' type='button' text='Back' onClick={() => setToggleModifyUser(false)}/>
                     </form>
-                </div>
-            )}
+                )}
+            </div>
         </div>
         </>
     );
