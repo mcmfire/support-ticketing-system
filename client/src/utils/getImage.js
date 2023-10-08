@@ -18,6 +18,29 @@ const getImage = (filename) => {
     });
 };
 
+const uploadImage = (filename, image) => {
+    const formData = new FormData();
+    formData.append('avatar-upload', image);
+
+    return new Promise((resolve) => {
+        fetch(`upload-avatar/${filename}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'multipart/form-data'},
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+
+            resolve(false);
+        })
+        .catch(() => {
+            resolve(true);
+        })
+    });
+};
+
 const deleteImage = (filename) => {
     return new Promise((resolve) => {
         fetch(`/delete-avatar/${filename}`, {
@@ -36,4 +59,4 @@ const deleteImage = (filename) => {
     });
 };
 
-export { getImage, deleteImage };
+export { getImage, uploadImage, deleteImage };

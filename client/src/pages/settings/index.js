@@ -10,7 +10,7 @@ import updateUser from "../../services/settings/updateUser";
 import deleteUser from "../../services/settings/deleteUser";
 import authReset from "../../utils/authReset";
 import UserRedirect from "../../utils/userRedirect";
-import { getImage, deleteImage } from '../../utils/getImage';
+import { getImage, uploadImage, deleteImage } from '../../utils/getImage';
 import './style.css';
 
 const Settings = () => {
@@ -25,6 +25,13 @@ const Settings = () => {
             setToAuth(navigate);
         });
     }, []);
+
+    const changeAvatar = (event, filename) => {
+        event.preventDefault();
+        const fileInput = event.target.elements['avatar-upload'].files[0];
+
+        uploadImage(filename, fileInput);
+    };
 
     const modifyUser = (event) => {
         event.preventDefault();
@@ -110,7 +117,8 @@ const Settings = () => {
             )}
             <div className='settings-content'>
                 {(!toAuth && toggleUploadAvatar) && (
-                    <form className='upload-avatar-form' encType='multipart/form-data'>
+                    <form className='upload-avatar-form' onSubmit={(event) => changeAvatar(event, accountInfo['_id'])} 
+                            encType='multipart/form-data'>
                         <label htmlFor='avatar-upload'>Choose avatar:</label>
                         <Input className='avatar-upload' name='avatar-upload' type='file'/>
                         <Button className='submit-button' type='submit' text='Upload Avatar'/>
