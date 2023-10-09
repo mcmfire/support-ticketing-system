@@ -13,10 +13,12 @@ def init_firebase_route(app):
     
     @app.route('/upload-avatar/<filename>', methods=['POST'])
     def upload_avatar(filename):
-        if 'avatar' not in request.files or request.files['avatar'].filename == '':
+        print(request.files['avatar-upload'])
+
+        if 'avatar-upload' not in request.files or request.files['avatar-upload'].filename == '':
             return jsonify({"message": "No image found."}), 404
         
-        avatar = request.files['avatar']
+        avatar = request.files['avatar-upload']
         blob = storage.bucket().blob(f'avatars/{filename}.jpg')
         
         blob.upload_from_file(avatar, content_type=File().type)

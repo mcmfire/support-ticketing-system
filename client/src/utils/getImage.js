@@ -25,7 +25,6 @@ const uploadImage = (filename, image) => {
     return new Promise((resolve) => {
         fetch(`upload-avatar/${filename}`, {
             method: 'POST',
-            headers: {'Content-Type': 'multipart/form-data'},
             body: formData,
         })
         .then(response => {
