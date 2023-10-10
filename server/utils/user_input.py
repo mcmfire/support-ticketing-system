@@ -10,7 +10,7 @@ route_require = {
     "panel_bp.update_task": ('_id', 'department', 'position', 'contact', 'title', 
                              'description', 'upvote', 'respondent', 'finished'),
     "panel_bp.delete_task": ('_id', ),
-    "settings_bp.update_account": ('email', 'first_name', 'last_name'),
+    "settings_bp.update_account": ('email', 'first_name', 'last_name', 'department', 'position'),
     "settings_bp.delete_account": ('refresh_token', ),
 }
 

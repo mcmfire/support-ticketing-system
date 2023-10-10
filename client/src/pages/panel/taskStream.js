@@ -151,7 +151,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                             {((!toggleModifyTask || toggleModifyTask != task['_id']) && (
                                 <>
                                 <p>{task['title']}</p>
-                                <p>{task['contact'] ? `Contact: ${task['contact']}` : null}</p>
+                                <p>{task['contact'] ? `Contact: ${task['contact']}` : 'Contact: N/A'}</p>
                                 </>
                             ))}
                             {((toggleModifyTask && toggleModifyTask == task['_id']) && (

@@ -7,7 +7,9 @@ input.lname-entry,
 input.email-entry,
 input.title-entry,
 input.description-entry,
-input.contact-entry {
+input.contact-entry,
+input.department-entry,
+input.position-entry {
     border-color: #1e1e1e;
     padding: 1vh 0.5vw;
 }
