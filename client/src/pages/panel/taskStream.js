@@ -9,12 +9,16 @@ import './style.css';
 const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
     const [toggleModifyTask, setToggleModifyTask] = useState('');
     const [tasksByDepartment, setTasksByDepartment] = useState({});
+    const [departmentHasUnfinished, setDepartmentHasUnfinished] = useState({});
+    const [departmentHasFinished, setDepartmentHasFinished] = useState({});
     const currentUser = sessionStorage.getItem('username');
 
     useEffect(() => {
         if (!tasks) {return;}
 
         let updatedTasksByDepartment = {};
+        let updatedDepartmentHasUnfinished = {};
+        let updatedDepartmentHasFinished = {};
 
         tasks.forEach((task) => {
             let taskExists = false;
@@ -39,9 +43,13 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
         
         for (const department in updatedTasksByDepartment) {
             updatedTasksByDepartment[department].sort((taskA, taskB) => taskB['upvotes'] - taskA['upvotes']);
+            updatedDepartmentHasUnfinished[department] = updatedTasksByDepartment[department].some(task => task['finished'] === false);
+            updatedDepartmentHasFinished[department] = updatedTasksByDepartment[department].some(task => task['finished'] === true);
         }
-
+        
         setTasksByDepartment(updatedTasksByDepartment);
+        setDepartmentHasUnfinished(updatedDepartmentHasUnfinished);
+        setDepartmentHasFinished(updatedDepartmentHasFinished);
     }, [tasks]);
 
     const isFinished = (finished) => {
@@ -137,8 +145,18 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
             <>
             {Object.keys(tasksByDepartment).map((department) => (
                 <>
-                <h1>{department}</h1>
-                <hr/>
+                {(!toggleFinishedTasks && departmentHasUnfinished[department]) && (
+                    <>
+                    <h1>{department}</h1>
+                    <hr/>
+                    </>
+                )}
+                {(toggleFinishedTasks && departmentHasFinished[department]) && (
+                    <>
+                    <h1>{department}</h1>
+                    <hr/>
+                    </>
+                )}
                 <div className='task-container'>
                 {tasksByDepartment[department].map((task, index) => (
                     <div key={`task-${index + 1}`} className='ticket-container' 

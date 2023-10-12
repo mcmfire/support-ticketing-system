@@ -12,4 +12,5 @@ class Task:
         self.date_created = datetime.utcnow().strftime("%B %d, %Y | %I:%M%p")
         self.upvotes = []
         self.respondent = None
+        self.finished = False
         

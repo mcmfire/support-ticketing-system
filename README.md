@@ -10,6 +10,11 @@
 - ReactJS
 - Flask
 - MongoDB
+- Firebase
+
+### Requirements
+- Python v3.11.4 and above
+- Node.js v20.5.1 and above
 
 ### Installation and Setup
 1. Navigate to the directory you want to save the files and open Command Prompt (cmd) there.
