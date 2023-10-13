@@ -58,4 +58,18 @@ const deleteImage = (filename) => {
     });
 };
 
-export { getImage, uploadImage, deleteImage };
+const readImage = (event, setUserAvatar) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const fileReader = new FileReader();
+
+      fileReader.onload = (event) => {
+        setUserAvatar(event.target.result);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+};
+
+export { getImage, uploadImage, deleteImage, readImage };

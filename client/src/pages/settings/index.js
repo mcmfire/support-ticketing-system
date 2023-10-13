@@ -10,7 +10,7 @@ import updateUser from "../../services/settings/updateUser";
 import deleteUser from "../../services/settings/deleteUser";
 import authReset from "../../utils/authReset";
 import UserRedirect from "../../utils/userRedirect";
-import { getImage, uploadImage, deleteImage } from '../../utils/getImage';
+import { readImage, uploadImage, deleteImage } from '../../utils/getImage';
 import './style.css';
 
 const Settings = () => {
@@ -18,16 +18,16 @@ const Settings = () => {
     const [toggleUploadAvatar, setToggleUploadAvatar] = useState(false);
     const [toggleModifyUser, setToggleModifyUser] = useState(false);
     const [accountInfo, setAccountInfo] = useState({});
+    const [userAvatar, setUserAvatar] = useState(null);
 
     useEffect(() => {
-        openSettings(setAccountInfo)
+        openSettings(setAccountInfo, setUserAvatar)
         .then(navigate => {
             setToAuth(navigate);
         });
     }, []);
 
     const changeAvatar = (event, filename) => {
-        event.preventDefault();
         const fileInput = event.target.elements['avatar-upload'].files[0];
 
         uploadImage(filename, fileInput);
@@ -127,12 +127,16 @@ const Settings = () => {
             )}
             <div className='settings-content'>
                 {(!toAuth && toggleUploadAvatar) && (
+                    <>
+                    <img src={userAvatar} alt={accountInfo['username']} style={{border: '#1e1e1e 2px solid', borderRadius: '50%', 
+                            height: '100px', width: '100px'}}/>
                     <form className='upload-avatar-form' onSubmit={(event) => changeAvatar(event, accountInfo['_id'])} 
                             encType='multipart/form-data'>
                         <label htmlFor='avatar-upload'>Choose avatar:</label>
-                        <Input className='avatar-upload' name='avatar-upload' type='file'/>
+                        <Input className='avatar-upload' name='avatar-upload' type='file' onChange={(event) => readImage(event, setUserAvatar)}/>
                         <Button className='submit-button' type='submit' text='Upload Avatar'/>
                     </form>
+                    </>
                 )}
                 {(!toAuth && toggleModifyUser) && (
                     <form className='modify-account-form' onSubmit={modifyUser}>

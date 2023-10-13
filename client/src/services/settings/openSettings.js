@@ -1,7 +1,7 @@
 import { getToken, setToken } from "../../utils/setToken";
 import authReset from "../../utils/authReset";
 
-const openSettings = (setAccountInfo) => {
+const openSettings = (setAccountInfo, setUserAvatar) => {
     const {access_token, refresh_token} = getToken();
 
     if (!refresh_token) {
@@ -32,6 +32,7 @@ const openSettings = (setAccountInfo) => {
                 openSettings();
             }
             setAccountInfo(data['account']);
+            setUserAvatar(`get-avatar/${data['account']['_id']}`)
             resolve(false);
         })
         .catch(() => {
