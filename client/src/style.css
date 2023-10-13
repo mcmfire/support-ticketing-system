@@ -13,3 +13,11 @@
     bottom: 0;
     left: 0;
 }
+
+*:focus {
+    outline: none;
+}
+
+.material-icons {
+    user-select: none;
+}

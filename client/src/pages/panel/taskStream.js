@@ -7,6 +7,7 @@ import deleteTask from '../../services/panel/deleteTask';
 import './style.css';
 
 const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
+    const [toggleTaskOptions, setToggleTaskOptions] = useState('');
     const [toggleModifyTask, setToggleModifyTask] = useState('');
     const [tasksByDepartment, setTasksByDepartment] = useState({});
     const [departmentHasUnfinished, setDepartmentHasUnfinished] = useState({});
@@ -163,7 +164,15 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                         style={{display: isFinished(task['finished']) ? 'none' : 'block'}}>
                         {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
                             <>
-                            <h2>{task['reporter']}</h2>
+                            <div className='task-header'>
+                                <h2>{task['reporter']}</h2>
+                                {!task['finished'] && (
+                                    <span className='material-icons task-options-button' 
+                                    onClick={() => {
+                                        toggleTaskOptions ? setToggleTaskOptions('') : setToggleTaskOptions(task['_id']);
+                                        }}>more_vert</span>
+                                )}
+                            </div>
                             <h3>{task['position']}</h3>
                             <hr/>
                             {((!toggleModifyTask || toggleModifyTask != task['_id']) && (
@@ -189,13 +198,14 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                             </>
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && 
-                            task['username'] == currentUser && toggleModifyTask != task['_id']) && (
-                            <>
-                            <Button className='modify-button' type='button' text='Modify' 
-                                    onClick={() => setToggleModifyTask(task['_id'])}/>
-                            <Button className='delete-button' type='button' text='Delete'
-                                    onClick={(event) => removeTask(event, task['_id'])}/>
-                            </>
+                            task['username'] == currentUser && toggleModifyTask != task['_id']
+                            && toggleTaskOptions == task['_id']) && (
+                            <div className='task-options'>
+                                <Button className='modify-button' type='button' text='Modify' 
+                                        onClick={() => setToggleModifyTask(task['_id'])}/>
+                                <Button className='delete-button' type='button' text='Delete'
+                                        onClick={(event) => removeTask(event, task['_id'])}/>
+                            </div>
                         )}
                         {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
                             <>

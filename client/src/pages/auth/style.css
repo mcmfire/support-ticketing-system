@@ -23,11 +23,35 @@
     padding: 2rem;
 }
 
+.identity-field {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.identity-field span {
+    display: flex;
+    align-items: center;
+    height: 4.5vh;
+    border: 2px solid #1e1e1e;
+    border-right: none;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    background: #1e1e1e;
+}
+
+#identity-icon,
+#password-icon {
+    color: #ffffff;
+    padding: 0vh 0.25vw;
+}
+
 .identity-form input,
 .password-form input {
-    border-radius: 0.25rem;
-    margin: 3vh 0vw;
-    
+    flex: 1;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    margin: 3vh 0vw;   
 }
 
 .identity-form button,

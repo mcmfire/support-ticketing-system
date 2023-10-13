@@ -53,6 +53,17 @@
     flex-wrap: wrap;
 }
 
+.task-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-options-button {
+    cursor: pointer;
+}
+
 .ticket-container {
     border: #1e1e1e 2px solid;
     flex-basis: calc(33.33% - 10px);

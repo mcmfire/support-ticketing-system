@@ -79,7 +79,10 @@ const Form = () => {
                     <>
                     <h1>Let's be a wingman today!</h1>
                     <form className='identity-form' onSubmit={submitIdentity}>
-                        <Input className='identity-entry' name='identity-entry' type='text' placeholder='Username or Email' required/>
+                        <div className='identity-field'>
+                            <span className="material-icons" id='identity-icon'>person</span>
+                            <Input className='identity-entry' name='identity-entry' type='text' placeholder='Username or Email' required/>
+                        </div>
                         <Button className='confirm-button' type='submit' text='Confirm'/>
                         <Button className='signup-button' type='button' text='Signup' onClick={() => setToggleRegister(true)}/>
                     </form>
@@ -89,12 +92,14 @@ const Form = () => {
                     <>
                     <h1>Welcome back, {username}!</h1>
                     <form className='password-form' onSubmit={submitPassword}>
-                        <Input className='password-entry' name='password-entry' type='password' placeholder='Password' required/>
+                        <div className='identity-field'>
+                            <span className="material-icons" id='password-icon'>lock</span>
+                            <Input className='password-entry' name='password-entry' type='password' placeholder='Password' required/>
+                        </div>
                         <Button className='login-button' type='submit' text='Login'/>
                         <Button className='back-button' type='button' text='Back' onClick={goBack}/>
                     </form>
                     </>
-                    
                 )}
                 {toggleRegister && (
                     <>
