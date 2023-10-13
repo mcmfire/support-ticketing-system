@@ -17,6 +17,7 @@ const Panel = () => {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const [profileAvatar, setProfileAvatar] = useState(null);
 
     useEffect(() => {
         openSocket('connect', () => {
@@ -72,19 +73,24 @@ const Panel = () => {
             {(!toAuth && toSettings) && UserRedirect('/settings')}
             {!toAuth && (
                 <Navbar navigation={
-                    <>
-                    <Button className='create-ticket-button' type='button' text='Create Ticket' onClick={() => setToggleTicket(true)}/>
-                    <Button className='finished-tasks-button' type='button' text={toggleFinishedTasks ? 'Active Tasks' : 'Finished Tasks'}
-                            onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
-                    <Button className='settings-button' type='button' text='Settings' onClick={() => setToSettings(!toSettings)}/>
-                    </>
+                    <div className='navigation-contents'>
+                        <img src={profileAvatar} style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '2em', width: '2em'}}/>
+                        <div className='navigation-options'>
+                            <Button className='create-ticket-button' type='button' text='Create' icon='add' 
+                                    onClick={() => setToggleTicket(true)}/>
+                            <Button className='finished-tasks-button' type='button' 
+                                    icon={toggleFinishedTasks ? 'assignment' : 'assignment_turned_in'}
+                                    onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
+                            <Button className='settings-button' type='button' icon='settings' onClick={() => setToSettings(!toSettings)}/>
+                        </div>
+                    </div>
                 }/>
             )}
             {!toAuth && (
                 <div className='panel-view'>
                     <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
                                 toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
-                    <UserStream onlineUsers={onlineUsers}/>
+                    <UserStream onlineUsers={onlineUsers} setProfileAvatar={setProfileAvatar}/>
                 </div>
             )}
         </div>

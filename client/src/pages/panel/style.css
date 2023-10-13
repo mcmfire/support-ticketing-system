@@ -2,11 +2,25 @@
     height: 100%;
 }
 
+.navigation-contents {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 2vw;
+}
+
+.navigation-options {
+    display: flex;
+    align-items: center;
+}
+
 .panel-view {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 3%;
+    margin-top: 2%;
     height: 93%;
 }
 
@@ -29,10 +43,19 @@
 }
 
 .create-ticket-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 5vh;
+    width: 6vw;
+    padding-left: 1em;
+    padding-right: 1em;
+    border: none;
+    border-radius: 10px;
     background-color: #00cf2e;
+    font-weight: 500;
 }
 
-.create-ticket-button,
 .finished-tasks-button,
 .settings-button, 
 .modify-button,

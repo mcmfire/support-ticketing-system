@@ -144,17 +144,18 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
         <div className='task-list'>
         {!toggleTicket && (
             <>
+            <h1>{toggleFinishedTasks ? 'Finished Tasks' : 'Tasks'}</h1>
             {Object.keys(tasksByDepartment).map((department) => (
                 <>
                 {(!toggleFinishedTasks && departmentHasUnfinished[department]) && (
                     <>
-                    <h1>{department}</h1>
+                    <h2>{department}</h2>
                     <hr/>
                     </>
                 )}
                 {(toggleFinishedTasks && departmentHasFinished[department]) && (
                     <>
-                    <h1>{department}</h1>
+                    <h2>{department}</h2>
                     <hr/>
                     </>
                 )}
@@ -165,7 +166,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                         {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
                             <>
                             <div className='task-header'>
-                                <h2>{task['reporter']}</h2>
+                                <h3>{task['reporter']}</h3>
                                 {!task['finished'] && (
                                     <span className='material-icons task-options-button' 
                                     onClick={() => {
@@ -173,7 +174,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                                         }}>more_vert</span>
                                 )}
                             </div>
-                            <h3>{task['position']}</h3>
+                            <h4>{task['position']}</h4>
                             <hr/>
                             {((!toggleModifyTask || toggleModifyTask != task['_id']) && (
                                 <>
