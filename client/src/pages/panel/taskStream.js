@@ -147,13 +147,8 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
             <h1>{toggleFinishedTasks ? 'Finished Tasks' : 'Tasks'}</h1>
             {Object.keys(tasksByDepartment).map((department) => (
                 <>
-                {(!toggleFinishedTasks && departmentHasUnfinished[department]) && (
-                    <>
-                    <h2>{department}</h2>
-                    <hr/>
-                    </>
-                )}
-                {(toggleFinishedTasks && departmentHasFinished[department]) && (
+                {(!toggleFinishedTasks && departmentHasUnfinished[department]) ||
+                 (toggleFinishedTasks && departmentHasFinished[department]) && (
                     <>
                     <h2>{department}</h2>
                     <hr/>
@@ -167,7 +162,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                             <>
                             <div className='task-header'>
                                 <h3>{task['reporter']}</h3>
-                                {!task['finished'] && (
+                                {(!task['finished'] && task['username'] == currentUser) && (
                                     <span className='material-icons task-options-button' 
                                     onClick={() => {
                                         toggleTaskOptions ? setToggleTaskOptions('') : setToggleTaskOptions(task['_id']);
@@ -193,7 +188,9 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                                             onClick={() => setToggleModifyTask('')}/>
                                 </form>
                             ))}
-                            <p>{task['respondent'] ? `Respondent: ${getName(task['respondent'])}` : null}</p>
+                            {task['respondent'] && (
+                                <p>{`Respondent: ${getName(task['respondent'])}`}</p>
+                            )}
                             <p>Upvotes: {task['upvotes']}</p>
                             <p>{task['date_created']}</p>
                             </>
@@ -220,8 +217,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                         {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (
                             <>
                             <Button className='finish-button' type='button' text='Finish' 
-                                onClick={(event) => finishTask(event, task['_id'])}
-                                style={{background: task['respondent'] ? '#d10000': '#1e1e1e'}}/>
+                                onClick={(event) => finishTask(event, task['_id'])}/>
                             </>
                         )}
                     </div>
