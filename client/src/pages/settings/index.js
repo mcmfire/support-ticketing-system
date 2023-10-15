@@ -69,17 +69,22 @@ const Settings = () => {
     };
 
     const endSession = () => {
-        logoutUser()
-        .then((navigate) => {
-            if (navigate) {
-                authReset();
-                UserRedirect('/auth');
-            }
-        });
+        const confirm = window.confirm('Are you sure you want to logout?');
+
+        if (confirm === true) {
+            logoutUser()
+            .then((navigate) => {
+                if (navigate) {
+                    authReset();
+                    UserRedirect('/auth');
+                }
+            });
+        }
     };
+        
 
     const removeUser = (imageId) => {
-        const confirm = window.confirm('Delete account?');
+        const confirm = window.confirm('Delete your account? This cannot be undone.');
 
         if (confirm === true) {
             deleteUser()
