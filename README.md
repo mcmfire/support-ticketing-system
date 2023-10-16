@@ -6,7 +6,7 @@
 - Real-time active user display to see available and unavailable respondents.
 - Account creation, modification, and deletion for up-to-date user identification and data saving.
 
-### Technologies
+### Tech Stack
 - ReactJS
 - Flask
 - MongoDB
@@ -65,3 +65,14 @@
     `npm run build`
 
 11. While the server is running, you can go to [http://localhost:5000/](http://localhost:5000/ "http://localhost:5000/") to start using the web application.
+
+### Containerization \[Optional\]
+1. Build the Docker image for containerization. You can change the name of the image following this format (**name**:**version/tag**).
+
+    `docker build -t support-ticketing-system:1.0`
+
+2. Replace **IMAGE_ID** with the image id of the docker image to run the image and create a container.
+
+    `docker run -p 5000:5000 IMAGE_ID`
+
+3. While the container is running, you can go to the same URL [http://localhost:5000/](http://localhost:5000/ "http://localhost:5000/") to access the web application.
