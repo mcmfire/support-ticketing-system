@@ -7,10 +7,10 @@
 - Account creation, modification, and deletion for up-to-date user identification and data saving.
 
 ### Tech Stack
-- ReactJS
-- Flask
-- MongoDB
-- Firebase
+- ReactJS (Frontend)
+- Flask (Backend)
+- MongoDB (Database)
+- Firebase (CDN)
 
 ### Requirements
 - Python v3.11.4 and above
