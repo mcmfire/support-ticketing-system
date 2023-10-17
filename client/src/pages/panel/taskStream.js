@@ -147,8 +147,13 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
             <h1>{toggleFinishedTasks ? 'Finished Tasks' : 'Tasks'}</h1>
             {Object.keys(tasksByDepartment).map((department) => (
                 <>
-                {(!toggleFinishedTasks && departmentHasUnfinished[department]) ||
-                 (toggleFinishedTasks && departmentHasFinished[department]) && (
+                {(!toggleFinishedTasks && departmentHasUnfinished[department]) && (
+                    <>
+                    <h2>{department}</h2>
+                    <hr/>
+                    </>
+                )}
+                {(toggleFinishedTasks && departmentHasFinished[department]) && (
                     <>
                     <h2>{department}</h2>
                     <hr/>
