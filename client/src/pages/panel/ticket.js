@@ -2,28 +2,10 @@ import React from "react";
 import Input from '../../components/input/input'
 import Button from "../../components/button/button";
 import { UserOptions, TaskTools } from './options';
-import updateTask from "../../services/panel/updateTask";
+import { ModifyTaskForm } from "./form";
 
 const Ticket = ({users, task, currentUser, toggleTaskOptions, setToggleTaskOptions, toggleModifyTask, 
                     setToggleModifyTask, toggleFinishedTasks, setToAuth}) => {
-    const editTask = (event, taskId) => {
-        event.preventDefault();
-        
-        const titleInput = event.target.elements['modify-title-entry'].value;
-        const contactInput = event.target.elements['modify-contact-entry'].value;
-
-        updateTask({
-            "_id": taskId,
-            "title": titleInput,
-            "contact": contactInput,
-        })
-        .then(navigate => {
-            if (!navigate) {
-                setToggleModifyTask('');
-            }
-            setToAuth(navigate);
-        });
-    };
 
     return (
         <>
@@ -43,15 +25,7 @@ const Ticket = ({users, task, currentUser, toggleTaskOptions, setToggleTaskOptio
             <p><strong>{task['title']}</strong></p>
         ))}
         {((toggleModifyTask && toggleModifyTask == task['_id']) && (
-            <form className='task-form' onSubmit={(event) => editTask(event, task['_id'])}>
-                <Input className='modify-title-entry' name='modify-title-entry' type='text'
-                        placeholder='Title' required/>
-                <Input className='modify-contact-entry' name='modify-contact-entry' type='text'
-                        placeholder='Contact'/>
-                <Button className='save-button' type='submit' text='Save'/>
-                <Button className='cancel-button' type='button' text='Cancel'
-                        onClick={() => setToggleModifyTask('')}/>
-            </form>
+            <ModifyTaskForm task={task} setToggleModifyTask={setToggleModifyTask} setToAuth={setToAuth}/>
         ))}
         <p>{task['respondent'] ? `Respondent: ${users.find(user => user['username'] === task['respondent'])['name']}` : 'Respondent: N/A'}</p>
         {(!toggleFinishedTasks && !task['finished'] && 

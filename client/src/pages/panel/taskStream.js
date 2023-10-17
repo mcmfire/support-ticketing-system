@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Ticket from './ticket';
-import CreateTicketForm from './form';
+import { CreateTicketForm } from './form';
 import './style.css';
 
 const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
@@ -61,13 +61,8 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
             <h1>{toggleFinishedTasks ? 'Finished Tasks' : 'Tasks'}</h1>
             {Object.keys(tasksByDepartment).map((department) => (
                 <>
-                {(!toggleFinishedTasks && departmentHasUnfinished[department]) && (
-                    <>
-                    <h2>{department}</h2>
-                    <hr/>
-                    </>
-                )}
-                {(toggleFinishedTasks && departmentHasFinished[department]) && (
+                {((!toggleFinishedTasks && departmentHasUnfinished[department]) || 
+                (toggleFinishedTasks && departmentHasFinished[department])) && (
                     <>
                     <h2>{department}</h2>
                     <hr/>
