@@ -60,11 +60,15 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
     const finishTask = (event, taskId) => {
         event.preventDefault();
 
-        updateTask({
-            "_id": taskId,
-            "finished": true,
-        })
-        .then(navigate => setToAuth(navigate));
+        const confirm = window.confirm('Finish task?');
+
+        if (confirm) {
+            updateTask({
+                "_id": taskId,
+                "finished": true,
+            })
+            .then(navigate => setToAuth(navigate));
+        }
     };
 
     return (

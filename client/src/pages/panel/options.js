@@ -7,8 +7,12 @@ const UserOptions = ({task, setToggleModifyTask, setToAuth}) => {
     const removeTask = (event, taskId) => {
         event.preventDefault();
 
-        deleteTask({"_id": taskId})
-        .then(navigate => setToAuth(navigate));
+        const confirm = window.confirm('Delete task?');
+
+        if (confirm) {
+            deleteTask({"_id": taskId})
+            .then(navigate => setToAuth(navigate));
+        }
     };
 
     return (
