@@ -60,9 +60,6 @@
 .settings-button, 
 .modify-button,
 .delete-button,
-.respond-button,
-.upvote-button,
-.finish-button,
 .submit-ticket-button,
 .back-button {
     padding: 0.5rem;
@@ -83,7 +80,30 @@
     align-items: center;
 }
 
+.task-tools {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.subinfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5%;
+    font-size: small;
+}
+
 .task-options-button {
+    height: -5px;
     cursor: pointer;
 }
 
@@ -116,9 +136,4 @@
     width: 100%;
     padding: 1%;
     background: #1e1e1e;
-}
-
-.user-container h1 {
-    color: #ffffff;
-    font-size: 1rem;
 }

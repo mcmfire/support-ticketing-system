@@ -31,10 +31,10 @@ const UserStream = ({onlineUsers, setProfileAvatar}) => {
     return (
         <div className="user-container">
         {onlineUsers.map((onlineUser, index) => (
-            <div key={`user-${index + 1}`} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div key={`user-${index + 1}`} style={{marginRight: '2%'}}>
                 <img className={`user-avatar`} src={avatarURLs[index]} alt={onlineUser['username']} 
-                    style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '4em', width: '4em'}}></img>
-                <h1>{currentUser == onlineUser['username'] ? 'You' : onlineUser['name']}</h1>
+                    title={currentUser == onlineUser['username'] ? 'You' : onlineUser['name']}
+                    style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '4em', width: '4em'}}/>
             </div>
         ))}
         </div>

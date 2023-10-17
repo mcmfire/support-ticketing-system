@@ -1,10 +1,11 @@
 import React from "react";
 import Input from '../../components/input/input'
 import Button from "../../components/button/button";
+import { UserOptions, TaskTools } from './options';
 import updateTask from "../../services/panel/updateTask";
 
 const Ticket = ({users, task, currentUser, toggleTaskOptions, setToggleTaskOptions, toggleModifyTask, 
-                    setToggleModifyTask, setToAuth}) => {
+                    setToggleModifyTask, toggleFinishedTasks, setToAuth}) => {
     const editTask = (event, taskId) => {
         event.preventDefault();
         
@@ -28,20 +29,18 @@ const Ticket = ({users, task, currentUser, toggleTaskOptions, setToggleTaskOptio
         <>
         <div className='task-header'>
             <h3>{task['reporter']}</h3>
-            {(!task['finished'] && task['username'] == currentUser) && (
-                <span className='material-icons task-options-button' 
-                onClick={() => {
-                    toggleTaskOptions ? setToggleTaskOptions('') : setToggleTaskOptions(task['_id']);
-                    }}>more_vert</span>
+            <TaskTools task={task} currentUser={currentUser} toggleTaskOptions={toggleTaskOptions} 
+                        setToggleTaskOptions={setToggleTaskOptions} toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
+        </div>
+        <div className='subinfo'>
+            <h4>{task['position']}</h4>
+            {!toggleFinishedTasks && (
+                <p style={{fontSize: 'smaller', marginRight: task['username'] === currentUser ? '7%' : '2%'}}>{task['upvotes']}</p>
             )}
         </div>
-        <h4>{task['position']}</h4>
         <hr/>
         {((!toggleModifyTask || toggleModifyTask != task['_id']) && (
-            <>
-            <p>{task['title']}</p>
-            <p>{task['contact'] ? `Contact: ${task['contact']}` : 'Contact: N/A'}</p>
-            </>
+            <p><strong>{task['title']}</strong></p>
         ))}
         {((toggleModifyTask && toggleModifyTask == task['_id']) && (
             <form className='task-form' onSubmit={(event) => editTask(event, task['_id'])}>
@@ -55,8 +54,15 @@ const Ticket = ({users, task, currentUser, toggleTaskOptions, setToggleTaskOptio
             </form>
         ))}
         <p>{task['respondent'] ? `Respondent: ${users.find(user => user['username'] === task['respondent'])['name']}` : 'Respondent: N/A'}</p>
-        <p>Upvotes: {task['upvotes']}</p>
-        <p>{task['date_created']}</p>
+        {(!toggleFinishedTasks && !task['finished'] && 
+                task['username'] == currentUser && toggleModifyTask != task['_id']
+                && toggleTaskOptions == task['_id']) && (
+                <UserOptions task={task} setToggleModifyTask={setToggleModifyTask} setToAuth={setToAuth}/>
+        )}
+        <div className='task-footer'>
+            <p><strong>Contact:</strong> {task['contact'] ? task['contact'] : 'N/A'}</p>
+            <p>{task['date_created']}</p>
+        </div>
         </>
     );
 };

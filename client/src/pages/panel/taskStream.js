@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../../components/button/button';
-import { UserOptions, RespondentOptions } from './options';
 import Ticket from './ticket';
 import CreateTicketForm from './form';
-import updateTask from '../../services/panel/updateTask';
 import './style.css';
 
 const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinishedTasks, setToAuth}) => {
@@ -57,20 +54,6 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
         return toggleFinishedTasks ? !finished : finished;
     };
 
-    const finishTask = (event, taskId) => {
-        event.preventDefault();
-
-        const confirm = window.confirm('Finish task?');
-
-        if (confirm) {
-            updateTask({
-                "_id": taskId,
-                "finished": true,
-            })
-            .then(navigate => setToAuth(navigate));
-        }
-    };
-
     return (
         <div className='task-list'>
         {!toggleTicket && (
@@ -97,21 +80,8 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                         {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
                             <Ticket users={users} task={task} currentUser={currentUser} toggleTaskOptions={toggleTaskOptions} 
                                     setToggleTaskOptions={setToggleTaskOptions} toggleModifyTask={toggleModifyTask} 
-                                    setToggleModifyTask={setToggleModifyTask} setToAuth={setToAuth}/>
-                        )}
-                        {(!toggleFinishedTasks && !task['finished'] && 
-                            task['username'] == currentUser && toggleModifyTask != task['_id']
-                            && toggleTaskOptions == task['_id']) && (
-                            <UserOptions task={task} setToggleModifyTask={setToggleModifyTask} setToAuth={setToAuth}/>
-                        )}
-                        {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
-                            <RespondentOptions task={task} currentUser={currentUser} setToAuth={setToAuth}/>
-                        )}
-                        {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (
-                            <>
-                            <Button className='finish-button' type='button' text='Finish' 
-                                onClick={(event) => finishTask(event, task['_id'])}/>
-                            </>
+                                    setToggleModifyTask={setToggleModifyTask} toggleFinishedTasks={toggleFinishedTasks} 
+                                    setToAuth={setToAuth}/>
                         )}
                     </div>
                     ))}

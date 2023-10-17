@@ -25,7 +25,7 @@ const UserOptions = ({task, setToggleModifyTask, setToAuth}) => {
     );
 };
 
-const RespondentOptions = ({task, currentUser, setToAuth}) => {
+const TaskTools = ({task, currentUser, toggleTaskOptions, setToggleTaskOptions, toggleFinishedTasks, setToAuth}) => {
     const respondTask = (event, taskId) => {
         event.preventDefault();
 
@@ -48,15 +48,42 @@ const RespondentOptions = ({task, currentUser, setToAuth}) => {
         .then(navigate => setToAuth(navigate));
     };
 
+    const finishTask = (event, taskId) => {
+        event.preventDefault();
+
+        const confirm = window.confirm('Finish task?');
+
+        if (confirm) {
+            updateTask({
+                "_id": taskId,
+                "finished": true,
+            })
+            .then(navigate => setToAuth(navigate));
+        }
+    };
+
     return (
-        <>
-        <Button className='respond-button' type='button' text='Respond' 
-            onClick={(event) => respondTask(event, task['_id'])}
-            style={{background: task['respondent'] ? '#00cf2e': '#1e1e1e'}}/>
-        <Button className='upvote-button' type='button' text='Upvote' 
-            onClick={(event) => upvoteTask(event, task['_id'])}/>
-        </>
+        <div className="task-tools">
+            {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
+                <i className='material-icons' style={{cursor: 'pointer', color: task['respondent'] ? '#00cf2e': '#1e1e1e'}}
+                    onClick={(event) => respondTask(event, task['_id'])}>play_circle_filled</i>
+            )}
+            {(!toggleFinishedTasks && !task['finished'] && task['respondent'] && task['username'] == currentUser) && (
+                <i className='material-icons' style={{cursor: 'pointer', color: '#00cf2e'}}
+                    onClick={(event) => finishTask(event, task['_id'])}>check_circle</i>
+            )}
+            {!toggleFinishedTasks && (
+                <i className='material-icons' style={{cursor: 'pointer'}}
+                    onClick={(event) => upvoteTask(event, task['_id'])}>present_to_all</i>
+            )}
+            {(!task['finished'] && task['username'] == currentUser) && (
+            <i className='material-icons task-options-button' 
+            onClick={() => {
+                toggleTaskOptions ? setToggleTaskOptions('') : setToggleTaskOptions(task['_id']);
+                }}>more_vert</i>
+        )}
+        </div>
     );
 };
 
-export { UserOptions, RespondentOptions };
+export { UserOptions, TaskTools };

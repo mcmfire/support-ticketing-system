@@ -28,6 +28,7 @@ const Settings = () => {
     }, []);
 
     const changeAvatar = (event, filename) => {
+        event.preventDefault();
         const fileInput = event.target.elements['avatar-upload'].files[0];
 
         uploadImage(filename, fileInput);
