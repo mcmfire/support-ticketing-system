@@ -57,13 +57,6 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
         return toggleFinishedTasks ? !finished : finished;
     };
 
-    const getName = (username) => {
-        const user = users.find((user) => user['username'] == username);
-        const name = user['first_name'] + ' ' + user['last_name'];
-
-        return name;
-    }
-
     const createTicket = (event) => {
         event.preventDefault();
 
@@ -194,7 +187,7 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                                 </form>
                             ))}
                             {task['respondent'] && (
-                                <p>{`Respondent: ${getName(task['respondent'])}`}</p>
+                                <p>{`Respondent: ${users.find(user => user.username === task['respondent'])['name']}`}</p>
                             )}
                             <p>Upvotes: {task['upvotes']}</p>
                             <p>{task['date_created']}</p>

@@ -21,6 +21,7 @@ class PanelService:
         
         for user in users:
             user['_id'] = str(user['_id'])
+            user['name'] = f'{user["first_name"]} {user["last_name"]}'
             user_list.append(user)
 
         return jsonify({"tasks": task_list, "users": user_list}), 200
