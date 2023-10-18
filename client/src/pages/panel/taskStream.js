@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import Ticket from './ticket';
 import { CreateTicketForm } from './form';
 import './style.css';
@@ -69,16 +69,18 @@ const TaskStream = ({tasks, users, toggleTicket, setToggleTicket, toggleFinished
                     </>
                 )}
                 <div className='task-container'>
-                {tasksByDepartment[department].map((task, index) => (
-                    <div key={`task-${index + 1}`} className='ticket-container' 
-                        style={{display: isFinished(task['finished']) ? 'none' : 'block'}}>
-                        {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
-                            <Ticket users={users} task={task} currentUser={currentUser} toggleTaskOptions={toggleTaskOptions} 
-                                    setToggleTaskOptions={setToggleTaskOptions} toggleModifyTask={toggleModifyTask} 
-                                    setToggleModifyTask={setToggleModifyTask} toggleFinishedTasks={toggleFinishedTasks} 
-                                    setToAuth={setToAuth}/>
-                        )}
-                    </div>
+                    {tasksByDepartment[department].map((task, index) => (
+                        <div key={`task-${index + 1}`} className='ticket-container' 
+                            style={{display: isFinished(task['finished']) ? 'none' : 'block'}}>
+                            {(toggleFinishedTasks ? task['finished'] : !task['finished']) && (
+                                <Suspense fallback={<></>} children={
+                                    <Ticket users={users} task={task} currentUser={currentUser} toggleTaskOptions={toggleTaskOptions} 
+                                        setToggleTaskOptions={setToggleTaskOptions} toggleModifyTask={toggleModifyTask} 
+                                        setToggleModifyTask={setToggleModifyTask} toggleFinishedTasks={toggleFinishedTasks} 
+                                        setToAuth={setToAuth}/>
+                                }/>
+                            )}
+                        </div>
                     ))}
                 </div>
                 </>

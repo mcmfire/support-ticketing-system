@@ -14,9 +14,7 @@ const Auth = () => {
             </div>
         }/>
         <div className='auth-page'>
-            {!toggleForm && (
-                <h1>Leave no request unresponded.</h1>
-            )}
+            <h1>Leave no request unresponded.</h1>
             {toggleForm && (
                 <Form/>
             )}

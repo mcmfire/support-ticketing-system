@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import TaskStream from './taskStream';
 import UserStream from './userStream';
 import Navbar from '../../components/navbar/navbar';
@@ -68,30 +68,36 @@ const Panel = () => {
     return (
         <div className='panel-page'>
             {toAuth && (
-                <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => {UserRedirect('/auth'); authReset();}}/>
+                <Dialog className='auth-dialog' text='Please login to continue.' 
+                        confirmFunction={() => {UserRedirect('/auth'); authReset();}}/>
             )}
             {(!toAuth && toSettings) && UserRedirect('/settings')}
             {!toAuth && (
                 <Navbar navigation={
                     <div className='navigation-contents'>
-                        <img src={profileAvatar} style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '2em', width: '2em'}}/>
+                        <img src={profileAvatar} loading='lazy' 
+                            style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '2em', width: '2em'}}/>
                         <div className='navigation-options'>
                             <Button className='create-ticket-button' type='button' text='Create' icon='add' 
                                     onClick={() => setToggleTicket(true)}/>
                             <Button className='finished-tasks-button' type='button' 
                                     icon={toggleFinishedTasks ? 'assignment' : 'assignment_turned_in'}
                                     onClick={() => setToggleFinishedTasks(!toggleFinishedTasks)}/>
-                            <Button className='settings-button' type='button' icon='settings' onClick={() => setToSettings(!toSettings)}/>
+                            <Button className='settings-button' type='button' icon='settings' 
+                                    onClick={() => setToSettings(!toSettings)}/>
                         </div>
                     </div>
                 }/>
             )}
             {!toAuth && (
-                <div className='panel-view'>
-                    <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} setToggleTicket={setToggleTicket} 
-                                toggleFinishedTasks={toggleFinishedTasks} setToAuth={setToAuth}/>
-                    <UserStream onlineUsers={onlineUsers} setProfileAvatar={setProfileAvatar}/>
-                </div>
+                <Suspense fallback={<></>} children={
+                    <div className='panel-view'>
+                        <TaskStream tasks={tasks} users={users} toggleTicket={toggleTicket} 
+                                    setToggleTicket={setToggleTicket} toggleFinishedTasks={toggleFinishedTasks} 
+                                    setToAuth={setToAuth}/>
+                        <UserStream onlineUsers={onlineUsers} setProfileAvatar={setProfileAvatar}/>
+                    </div>
+                }/>
             )}
         </div>
     );

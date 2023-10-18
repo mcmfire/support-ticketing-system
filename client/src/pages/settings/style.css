@@ -4,6 +4,13 @@
     margin-top: 5%;
 }
 
+.settings-tabs {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .settings-options {
     display: flex;
     flex: 0 0 30%;
