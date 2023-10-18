@@ -1,5 +1,5 @@
-import { setToken, getToken } from "../../utils/setToken";
-import authReset from "../../utils/authReset";
+import { setToken, getToken } from '../../utils/setToken';
+import authReset from '../../utils/authReset';
 
 const logoutUser = () => {
     const {access_token, refresh_token} = getToken();

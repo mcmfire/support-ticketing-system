@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { getImage } from "../../utils/getImage";
+import React, { useEffect, useState } from 'react';
+import { getImage } from '../../utils/getImage';
 
 const UserStream = ({onlineUsers, setProfileAvatar}) => {
     const [avatarURLs, setAvatarURLs] = useState([]); 

@@ -1,8 +1,6 @@
-import React from "react";
-import Input from '../../components/input/input'
-import Button from "../../components/button/button";
+import React from 'react';
 import { UserOptions, TaskTools } from './options';
-import { ModifyTaskForm } from "./form";
+import { ModifyTaskForm } from './form';
 
 const Ticket = ({users, task, currentUser, toggleTaskOptions, setToggleTaskOptions, toggleModifyTask, 
                     setToggleModifyTask, toggleFinishedTasks, setToAuth}) => {

@@ -68,7 +68,7 @@ const Panel = () => {
     return (
         <div className='panel-page'>
             {toAuth && (
-                <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => UserRedirect('/auth')}/>
+                <Dialog className='auth-dialog' text='Please login to continue.' confirmFunction={() => {UserRedirect('/auth'); authReset();}}/>
             )}
             {(!toAuth && toSettings) && UserRedirect('/settings')}
             {!toAuth && (

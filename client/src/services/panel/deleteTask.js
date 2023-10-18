@@ -1,5 +1,5 @@
-import authReset from "../../utils/authReset";
-import { setToken, getToken } from "../../utils/setToken";
+import authReset from '../../utils/authReset';
+import { setToken, getToken } from '../../utils/setToken';
 
 const deleteTask = (taskId) => {
     const {access_token, refresh_token} = getToken();

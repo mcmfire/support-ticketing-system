@@ -1,5 +1,5 @@
-import { getToken, setToken } from "../../utils/setToken";
-import authReset from "../../utils/authReset";
+import { getToken, setToken } from '../../utils/setToken';
+import authReset from '../../utils/authReset';
 
 const openSettings = (setAccountInfo, setUserAvatar) => {
     const {access_token, refresh_token} = getToken();

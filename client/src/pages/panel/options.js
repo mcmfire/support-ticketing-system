@@ -1,7 +1,7 @@
-import React from "react";
-import Button from "../../components/button/button";
-import updateTask from "../../services/panel/updateTask";
-import deleteTask from "../../services/panel/deleteTask";
+import React from 'react';
+import Button from '../../components/button/button';
+import updateTask from '../../services/panel/updateTask';
+import deleteTask from '../../services/panel/deleteTask';
 
 const UserOptions = ({task, setToggleModifyTask, setToAuth}) => {
     const removeTask = (event, taskId) => {
@@ -63,7 +63,7 @@ const TaskTools = ({task, currentUser, toggleTaskOptions, setToggleTaskOptions, 
     };
 
     return (
-        <div className="task-tools">
+        <div className='task-tools'>
             {(!toggleFinishedTasks && !task['finished'] && task['username'] != currentUser) && (
                 <i className='material-icons' style={{cursor: 'pointer', color: task['respondent'] ? '#00cf2e': '#1e1e1e'}}
                     onClick={(event) => respondTask(event, task['_id'])}>play_circle_filled</i>

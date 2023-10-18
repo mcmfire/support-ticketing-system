@@ -1,8 +1,8 @@
-import React from "react";
-import Input from "../../components/input/input";
-import Button from "../../components/button/button";
-import createTask from "../../services/panel/createTask";
-import updateTask from "../../services/panel/updateTask";
+import React from 'react';
+import Input from '../../components/input/input';
+import Button from '../../components/button/button';
+import createTask from '../../services/panel/createTask';
+import updateTask from '../../services/panel/updateTask';
 
 const CreateTicketForm = ({setToggleTicket, setToAuth}) => {
     const createTicket = (event) => {
