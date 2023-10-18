@@ -67,7 +67,7 @@
 11. While the server is running, you can go to [http://localhost:5000/](http://localhost:5000/ "http://localhost:5000/") to start using the web application.
 
 ### Containerization \[Optional\]
-1. Build the Docker image for containerization. You can change the name of the image following this format (**name**:**version/tag**).
+1. Go to the root folder **support-ticketing-system** and build the Docker image for containerization. You can change the name of the image following this format (**name**:**version/tag**).
 
     `docker build -t support-ticketing-system:1.0`
 
