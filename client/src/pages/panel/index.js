@@ -75,7 +75,7 @@ const Panel = () => {
             {!toAuth && (
                 <Navbar navigation={
                     <div className='navigation-contents'>
-                        <img src={profileAvatar} loading='lazy' 
+                        <img src={profileAvatar} loading='lazy' alt='Profile Avatar'
                             style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '2em', width: '2em'}}/>
                         <div className='navigation-options'>
                             <Button className='create-ticket-button' type='button' text='Create' icon='add' 
