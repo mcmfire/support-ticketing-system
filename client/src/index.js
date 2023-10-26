@@ -5,7 +5,7 @@ import './style.css';
 
 const Auth = React.lazy(() => import('./pages/auth'));
 const Panel = React.lazy(() => import('./pages/panel'));
-const Settings = React.lazy(() => import('./pages/panel'));
+const Settings = React.lazy(() => import('./pages/settings'));
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <div className='app'>
