@@ -16,7 +16,7 @@
 }
 
 .form-container {
-    border: 2px solid #1e1e1e;
+    border: 2px solid #274472;
     border-radius: 0.5rem;
     width: 30%;
     margin: 5vh 5vw 0vh 0vw;
@@ -33,11 +33,11 @@
     display: flex;
     align-items: center;
     height: 4.5vh;
-    border: 2px solid #1e1e1e;
+    border: 2px solid #274472;
     border-right: none;
     border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
-    background: #1e1e1e;
+    background: #274472;
 }
 
 #identity-icon,

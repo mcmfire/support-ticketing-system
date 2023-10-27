@@ -108,7 +108,7 @@
 }
 
 .ticket-container {
-    border: #1e1e1e 2px solid;
+    border: #274472 2px solid;
     flex-basis: calc(33.33% - 10px);
     margin: 5px;
     padding: 1rem;
@@ -135,5 +135,5 @@
     bottom: 0;
     width: 100%;
     padding: 1%;
-    background: #1e1e1e;
+    background: #274472;
 }

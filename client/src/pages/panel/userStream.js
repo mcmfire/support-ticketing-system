@@ -34,7 +34,7 @@ const UserStream = ({onlineUsers, setProfileAvatar}) => {
             <div key={`user-${index + 1}`} style={{marginRight: '2%'}}>
                 <img className={`user-avatar`} src={avatarURLs[index]} alt={onlineUser['username']} loading='lazy' 
                     title={currentUser == onlineUser['username'] ? 'You' : onlineUser['name']}
-                    style={{border: '#1e1e1e 2px solid', borderRadius: '50%', height: '4em', width: '4em'}}/>
+                    style={{border: '#274472 2px solid', borderRadius: '50%', height: '4em', width: '4em'}}/>
             </div>
         ))}
         </div>

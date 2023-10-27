@@ -3,12 +3,12 @@ div.auth-dialog {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: #1e1e1e 1.5px solid;
+    border: #274472 1.5px solid;
 }
 
 div.auth-dialog button {
-    background-color: #1e1e1e;
+    background-color: #274472;
     color: #ffffff;
-    border-color: #1e1e1e;
+    border-color: #274472;
     cursor: pointer;
 }
