@@ -1,0 +1,11 @@
+{
+  "name": "support-ticketing-system",
+  "version": "0.1.0",
+  "description": "The official package for Support Ticketing System.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": ["support", "ticketing"],
+  "author": "Marc Chester Masakayan",
+  "license": "ISC"
+}
